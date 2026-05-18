@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOX AI — Automation Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vox-purple: #7c3aed;
+    --vox-purple-deep: #4c1d95;
+    --vox-purple-glow: rgba(124,58,237,0.4);
+    --vox-black: #09090b;
+    --vox-glass: rgba(255,255,255,0.05);
+    --vox-glass-border: rgba(255,255,255,0.12);
+    --vox-text: #f4f4f5;
+    --vox-muted: rgba(244,244,245,0.55);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0f0a1e;
+    color: var(--vox-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SITE MOCKUP ── */
+  .site-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(9,9,11,0.7);
+  }
+  .site-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .lang-switcher {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--vox-glass-border);
+    color: var(--vox-muted);
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    border-color: var(--vox-purple);
+    color: #a78bfa;
+    background: rgba(124,58,237,0.15);
+  }
+  .site-hero {
+    max-width: 900px;
+    margin: 9rem auto 0;
+    text-align: center;
+    padding: 0 2rem;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(167,139,250,0.3);
+    background: rgba(124,58,237,0.1);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-size: 0.8rem;
+    color: #a78bfa;
+    margin-bottom: 2rem;
+  }
+  .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: #7c3aed; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .hero-h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+  .hero-h1 span { color: #a78bfa; }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--vox-muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 3rem;
+  }
+
+  /* ── FLOATING BUTTON ── */
+  #vox-fab {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    border: none;
+    cursor: pointer;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 0 rgba(124,58,237,0.5), 0 8px 32px rgba(124,58,237,0.45);
+    animation: fab-pulse 3s ease-in-out infinite;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #vox-fab:hover { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(124,58,237,0.15), 0 12px 40px rgba(124,58,237,0.55); }
+  @keyframes fab-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.5), 0 8px 32px rgba(124,58,237,0.45); }
+    50% { box-shadow: 0 0 0 12px rgba(124,58,237,0.1), 0 8px 32px rgba(124,58,237,0.45); }
+  }
+  #vox-fab svg { width: 28px; height: 28px; }
+
+  /* ── WELCOME POPUP ── */
+  #vox-popup {
+    position: fixed;
+    bottom: 7.2rem;
+    left: 1.5rem;
+    background: rgba(30,20,60,0.95);
+    border: 1px solid var(--vox-glass-border);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    max-width: 250px;
+    z-index: 8999;
+    backdrop-filter: blur(20px);
+    animation: popup-in 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    font-size: 0.88rem;
+    color: var(--vox-text);
+    line-height: 1.5;
+  }
+  #vox-popup::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 28px;
+    width: 16px; height: 16px;
+    background: rgba(30,20,60,0.95);
+    border-right: 1px solid var(--vox-glass-border);
+    border-bottom: 1px solid var(--vox-glass-border);
+    transform: rotate(45deg);
+    border-radius: 0 0 4px 0;
+  }
+  #vox-popup strong { color: #a78bfa; font-weight: 600; }
+  @keyframes popup-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.92); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  #vox-popup-close {
+    position: absolute;
+    top: 6px; right: 8px;
+    background: none; border: none;
+    color: var(--vox-muted);
+    cursor: pointer; font-size: 1rem; line-height: 1;
+  }
+  #vox-popup.hidden { display: none; }
+
+  /* ── MAIN OVERLAY ── */
+  #vox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    background: linear-gradient(160deg, rgba(76,29,149,0.85) 0%, rgba(9,9,11,0.97) 60%);
+    backdrop-filter: blur(18px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #vox-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* ── MODE SELECT SCREEN ── */
+  #mode-select {
+    text-align: center;
+    padding: 2rem;
+  }
+  .vox-logo-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.4rem;
+  }
+  .vox-tagline {
+    color: var(--vox-muted);
+    font-size: 0.95rem;
+    margin-bottom: 3rem;
+  }
+  .mode-cards {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .mode-card {
+    background: var(--vox-glass);
+    border: 1px solid var(--vox-glass-border);
+    border-radius: 20px;
+    padding: 2rem 1.8rem;
+    width: 175px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .mode-card:hover {
+    border-color: var(--vox-purple);
+    background: rgba(124,58,237,0.15);
+    transform: translateY(-4px);
+  }
+  .mode-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mode-icon svg { width: 26px; height: 26px; stroke: #a78bfa; }
+  .mode-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--vox-text);
+  }
+  .mode-desc { font-size: 0.78rem; color: var(--vox-muted); line-height: 1.4; }
+  .btn-cancel {
+    margin-top: 2rem;
+    background: none;
+    border: 1px solid var(--vox-glass-border);
+    color: var(--vox-muted);
+    padding: 0.6rem 2rem;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover { border-color: rgba(255,255,255,0.3); color: var(--vox-text); }
+
+  /* ── CHAT SCREEN ── */
+  #chat-screen {
+    display: none;
+    flex-direction: column;
+    width: min(520px, 95vw);
+    height: min(680px, 90vh);
+    background: rgba(15,10,30,0.7);
+    border: 1px solid var(--vox-glass-border);
+    border-radius: 28px;
+    overflow: hidden;
+    backdrop-filter: blur(24px);
+  }
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--vox-glass-border);
+  }
+  .chat-header-left { display: flex; align-items: center; gap: 0.8rem; }
+  .vox-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .chat-header-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+  }
+  .chat-status {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.72rem; color: #4ade80;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+  .btn-end {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--vox-muted);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-end:hover { border-color: #f87171; color: #f87171; }
+
+  /* MESSAGES */
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-behavior: smooth;
+  }
+  #messages::-webkit-scrollbar { width: 4px; }
+  #messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+  .msg { display: flex; gap: 0.6rem; align-items: flex-end; max-width: 85%; }
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.bot { align-self: flex-start; }
+  .msg-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .msg-bubble {
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .msg.bot .msg-bubble {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--vox-text);
+    border-bottom-left-radius: 5px;
+  }
+  .msg.user .msg-bubble {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+  }
+  .typing-indicator {
+    display: flex; gap: 4px; align-items: center; padding: 0.5rem 0;
+  }
+  .typing-indicator span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--vox-purple);
+    animation: typing 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%,80%,100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* QUICK REPLIES */
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0 1.5rem 1rem;
+  }
+  .quick-btn {
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.3);
+    color: #a78bfa;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .quick-btn:hover { background: rgba(124,58,237,0.25); border-color: #7c3aed; }
+
+  /* INPUT */
+  .chat-input-area {
+    display: flex;
+    gap: 0.6rem;
+    padding: 1rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--vox-glass-border);
+    align-items: flex-end;
+  }
+  #chat-input {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+    color: var(--vox-text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    resize: none;
+    max-height: 110px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #chat-input::placeholder { color: var(--vox-muted); }
+  #chat-input:focus { border-color: rgba(124,58,237,0.5); }
+  .btn-send {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-send:hover { transform: scale(1.08); box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
+  .btn-send svg { width: 20px; height: 20px; }
+
+  /* ── VOICE SCREEN ── */
+  #voice-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: min(480px, 95vw);
+    height: min(600px, 88vh);
+    background: rgba(15,10,30,0.7);
+    border: 1px solid var(--vox-glass-border);
+    border-radius: 28px;
+    overflow: hidden;
+    backdrop-filter: blur(24px);
+    position: relative;
+    gap: 2rem;
+  }
+  .voice-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--vox-glass-border);
+  }
+  .voice-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .voice-core-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .voice-rings {
+    position: relative;
+    width: 200px; height: 200px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .voice-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(124,58,237,0.35);
+    animation: ring-expand 3s ease-in-out infinite;
+  }
+  .voice-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+  .voice-ring:nth-child(2) { width: 155px; height: 155px; animation-delay: 0.5s; }
+  .voice-ring:nth-child(3) { width: 115px; height: 115px; animation-delay: 1s; }
+  @keyframes ring-expand {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.06); }
+  }
+  #voice-btn {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    border: 3px solid rgba(167,139,250,0.3);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 2;
+    transition: all 0.2s;
+    box-shadow: 0 0 40px rgba(124,58,237,0.4);
+  }
+  #voice-btn:hover { transform: scale(1.06); box-shadow: 0 0 60px rgba(124,58,237,0.6); }
+  #voice-btn.recording {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    border-color: rgba(248,113,113,0.5);
+    box-shadow: 0 0 50px rgba(220,38,38,0.5);
+    animation: rec-pulse 1.5s infinite;
+  }
+  @keyframes rec-pulse {
+    0%,100% { box-shadow: 0 0 30px rgba(220,38,38,0.5); }
+    50% { box-shadow: 0 0 60px rgba(220,38,38,0.7); }
+  }
+  #voice-btn svg { width: 32px; height: 32px; stroke: #fff; }
+  .voice-hint { color: var(--vox-muted); font-size: 0.85rem; text-align: center; }
+  .voice-transcript {
+    max-width: 340px;
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    min-height: 60px;
+    color: var(--vox-text);
+  }
+  .voice-transcript.empty { color: var(--vox-muted); }
+
+  /* wave bars when recording */
+  .wave-bars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .wave-bars.active { opacity: 1; }
+  .wave-bar {
+    width: 4px;
+    border-radius: 4px;
+    background: var(--vox-purple);
+    animation: wave-anim 0.7s ease-in-out infinite alternate;
+  }
+  .wave-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .wave-bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
+  .wave-bar:nth-child(3) { height: 28px; animation-delay: 0.05s; }
+  .wave-bar:nth-child(4) { height: 16px; animation-delay: 0.15s; }
+  .wave-bar:nth-child(5) { height: 24px; animation-delay: 0.08s; }
+  .wave-bar:nth-child(6) { height: 10px; animation-delay: 0.12s; }
+  .wave-bar:nth-child(7) { height: 22px; animation-delay: 0.04s; }
+  @keyframes wave-anim {
+    from { transform: scaleY(1); }
+    to   { transform: scaleY(0.3); }
+  }
+
+  /* ── CONTACT FORM (lead capture) ── */
+  .lead-form {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 16px;
+    padding: 1.1rem;
+    margin-top: 0.5rem;
+  }
+  .lead-form h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #a78bfa;
+    margin-bottom: 0.8rem;
+  }
+  .lead-form input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 0.55rem 0.85rem;
+    color: var(--vox-text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    outline: none;
+    margin-bottom: 0.5rem;
+    transition: border-color 0.2s;
+  }
+  .lead-form input:focus { border-color: rgba(124,58,237,0.5); }
+  .lead-form input::placeholder { color: var(--vox-muted); }
+  .lead-submit {
+    width: 100%;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    padding: 0.55rem;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  .lead-submit:hover { opacity: 0.85; }
+
+  /* UTILS */
+  .hidden { display: none !important; }
+  .screen-active { display: flex !important; }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE MOCKUP ═══ -->
+<nav class="site-nav">
+  <div class="site-logo">VOX</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+<div class="site-hero">
+  <div class="hero-tag"><span class="hero-dot"></span> <span id="hero-tag-text">وكالة أتمتة متقدمة</span></div>
+  <h1 class="hero-h1" id="hero-h1">نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span></h1>
+  <p class="hero-sub" id="hero-sub">حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.</p>
+</div>
+
+<!-- ═══ FLOATING BUTTON ═══ -->
+<button id="vox-fab" onclick="openOverlay()" aria-label="فتح VOX">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</button>
+
+<!-- ═══ WELCOME POPUP ═══ -->
+<div id="vox-popup">
+  <button id="vox-popup-close" onclick="document.getElementById('vox-popup').classList.add('hidden')" aria-label="إغلاق">✕</button>
+  <p id="popup-text">👋 مرحبًا، أنا <strong>VOX</strong>! هنا لمساعدتك. اضغط وابدأ محادثة معي</p>
+</div>
+
+<!-- ═══ MAIN OVERLAY ═══ -->
+<div id="vox-overlay">
+
+  <!-- MODE SELECT -->
+  <div id="mode-select">
+    <div class="vox-logo-big">VOX</div>
+    <p class="vox-tagline" id="mode-tagline">مساعدك الذكي  </p>
+    <div class="mode-cards">
+      <div class="mode-card" onclick="openChat()">
+        <div class="mode-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="mode-label" id="mode-text-label">محادثة نصية</div>
+        <div class="mode-desc" id="mode-text-desc">اكتب سؤالك وسأرد فورًا</div>
+      </div>
+      <div class="mode-card" onclick="openVoice()">
+        <div class="mode-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+          </svg>
+        </div>
+        <div class="mode-label" id="mode-voice-label">محادثة صوتية</div>
+        <div class="mode-desc" id="mode-voice-desc">تحدث مع VOX صوتيًا</div>
+      </div>
+    </div>
+    <button class="btn-cancel" onclick="closeOverlay()" id="mode-cancel-btn">إلغاء</button>
+  </div>
+
+  <!-- CHAT SCREEN -->
+  <div id="chat-screen">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="vox-avatar">VOX</div>
+        <div class="chat-header-info">
+          <h3>VOX AI</h3>
+          <div class="chat-status"><span class="status-dot"></span> <span id="chat-status-text">متصل</span></div>
+        </div>
+      </div>
+      <button class="btn-end" onclick="endChat()" id="btn-end-chat">إنهاء المحادثة</button>
+    </div>
+    <div id="messages"></div>
+    <div class="quick-replies" id="quick-replies"></div>
+    <div class="chat-input-area">
+      <textarea id="chat-input" rows="1" placeholder="اكتب رسالتك..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="btn-send" onclick="sendMessage()" aria-label="إرسال">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <!-- VOICE SCREEN -->
+  <div id="voice-screen">
+    <div class="voice-header">
+      <div class="chat-header-left">
+        <div class="vox-avatar">VOX</div>
+        <div>
+          <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;" id="voice-title-text">وضع الصوت</h3>
+          <div class="chat-status"><span class="status-dot"></span><span id="voice-status-text">جاهز للاستماع</span></div>
+        </div>
+      </div>
+      <button class="btn-end" onclick="endChat()" id="btn-end-voice">إنهاء المحادثة</button>
+    </div>
+    <div class="voice-core-wrap">
+      <div class="voice-rings">
+        <div class="voice-ring"></div>
+        <div class="voice-ring"></div>
+        <div class="voice-ring"></div>
+        <button id="voice-btn" onclick="toggleRecording()">
+          <svg id="mic-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+          </svg>
+        </button>
+      </div>
+      <div class="wave-bars" id="wave-bars">
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+      <p class="voice-hint" id="voice-hint-text">اضغط على الدائرة للتحدث</p>
+      <div class="voice-transcript empty" id="voice-transcript" id="voice-transcript-text">...</div>
+    </div>
+  </div>
+
+</div><!-- end overlay -->
+
+<script>
+// ─── STATE ───
+let currentLang = 'ar';
+let isRecording = false;
+let recognition = null;
+let conversationHistory = [];
+let awaitingLead = false;
+
+// ─── COPY ───
+const copy = {
+  ar: {
+    popupText: '👋 مرحبًا، أنا <strong>VOX</strong>! هنا لمساعدتك. اضغط وابدأ محادثة معي',
+    heroTag: 'وكالة  متقدمة',
+    heroH1: 'نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span>',
+    heroSub: 'حلول  ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.',
+    modeTagline: 'مساعدك الذكي لخدمات ',
+    modeTextLabel: 'محادثة نصية', modeTextDesc: 'اكتب سؤالك وسأرد فورًا',
+    modeVoiceLabel: 'محادثة صوتية', modeVoiceDesc: 'تحدث مع VOX صوتيًا',
+    modeCancel: 'إلغاء', chatStatus: 'متصل', endChat: 'إنهاء المحادثة',
+    voiceTitle: 'وضع الصوت', voiceStatus: 'جاهز للاستماع', voiceHint: 'اضغط على الدائرة للتحدث',
+    inputPlaceholder: 'اكتب رسالتك...',
+    welcome: 'مرحبًا! أنا VOX، مساعدك الذكي لخدمات . كيف يمكنني مساعدتك اليوم؟',
+    quickReplies: ['ما هي خدماتكم؟', 'كم تكلف الخدمة؟', 'أريد التواصل', 'كيف تعمل ؟'],
+    voiceListening: 'جارٍ الاستماع...',
+    voiceProcessing: 'جارٍ المعالجة...',
+  },
+  en: {
+    popupText: '👋 Hi, I\'m <strong>VOX</strong>! I\'m here to help. Click to start chatting.',
+    heroTag: 'Advanced Automation Agency',
+    heroH1: 'Automate your business<br>with <span>AI power</span>',
+    heroSub: 'Smart automation, API integrations, and professional digital services — freeing your time for what matters.',
+    modeTagline: 'Your AI assistant for automation services',
+    modeTextLabel: 'Text Chat', modeTextDesc: 'Type your question, I\'ll respond instantly',
+    modeVoiceLabel: 'Voice Chat', modeVoiceDesc: 'Talk with VOX by voice',
+    modeCancel: 'Cancel', chatStatus: 'Online', endChat: 'End Chat',
+    voiceTitle: 'Voice Mode', voiceStatus: 'Ready to listen', voiceHint: 'Tap the circle to speak',
+    inputPlaceholder: 'Type your message...',
+    welcome: 'Hello! I\'m VOX, your smart AI assistant for automation services. How can I help you today?',
+    quickReplies: ['What are your services?', 'How much does it cost?', 'I want to contact you', 'How does automation work?'],
+    voiceListening: 'Listening...',
+    voiceProcessing: 'Processing...',
+  },
+  fr: {
+    popupText: '👋 Bonjour, je suis <strong>VOX</strong>! Je suis là pour vous aider. Cliquez pour commencer.',
+    heroTag: 'Agence d\'automatisation intelligente',
+    heroH1: 'Automatisez votre business<br>avec <span>l\'IA</span>',
+    heroSub: 'Automatisations intelligentes, intégrations API, et services numériques professionnels — nous libérons votre temps.',
+    modeTagline: 'Votre assistant IA pour l\'automatisation',
+    modeTextLabel: 'Chat Texte', modeTextDesc: 'Posez votre question, je réponds aussitôt',
+    modeVoiceLabel: 'Chat Vocal', modeVoiceDesc: 'Parlez à VOX par la voix',
+    modeCancel: 'Annuler', chatStatus: 'En ligne', endChat: 'Terminer la conversation',
+    voiceTitle: 'Mode Vocal', voiceStatus: 'Prêt à écouter', voiceHint: 'Appuyez sur le cercle pour parler',
+    inputPlaceholder: 'Tapez votre message...',
+    welcome: 'Bonjour! Je suis VOX, votre assistant IA pour les services d\'automatisation. Comment puis-je vous aider aujourd\'hui?',
+    quickReplies: ['Quels sont vos services?', 'Quel est le tarif?', 'Je veux vous contacter', 'Comment fonctionne l\'automatisation?'],
+    voiceListening: 'En écoute...',
+    voiceProcessing: 'Traitement...',
+  }
+};
+
+// ─── AI RESPONSES ───
+const aiResponses = {
+  ar: {
+    services: `خدماتنا تشمل:\n\n🔗 **تكامل APIs والأنظمة** — ربط أدواتك ببعضها تلقائيًا\n⚙️ **بناء Workflows** — تصميم تدفقات عمل ذكية واحترافية\n📧 **أتمتة التسويق** — ايميل، Telegram، WhatsApp\n📊 **لوحات بيانات** — تقارير تلقائية في Google Sheets / Airtable\n🤖 **بناء Chatbots** — مثل هذا بالضبط!\n\nهل تريد تفاصيل عن خدمة معينة؟`,
+    pricing: `التسعير يعتمد على حجم المشروع وتعقيده.\n\n📦 **مشاريع صغيرة:** تبدأ من 150$\n🏗️ **مشاريع متوسطة:** 300$ – 800$\n🏢 **مشاريع كبيرة:** تُحدَّد بعد التشاور\n\nأرسل لنا تفاصيل مشروعك ونقدم لك عرضًا دقيقًا. هل تريد التواصل معنا؟`,
+    contact: `سيسعدنا التواصل معك! 🎯\n\nسأحتاج منك بعض المعلومات للتواصل:`,
+    automation: ` الذكية تعمل كالتالي:\n\n1️⃣ **Trigger** — حدث يبدأ العملية (بريد إلكتروني، webhook، وقت محدد)\n2️⃣ **Processing** — معالجة البيانات وتحويلها\n3️⃣ **Action** — تنفيذ الإجراء المطلوب (إرسال، حفظ، إشعار)\n\nمثال: "عميل جديد يملأ نموذج → يُضاف تلقائيًا للـ CRM → يتلقى بريد ترحيب → تُرسل إشعار على Telegram"\n\nهل تريد مثالًا على workflow لعملك؟`,
+    default: `شكرًا على سؤالك! 🙏\n\nأنا VOX، أنا متخصص في الإجابة على استفسارات خدمات  لدينا.\n\nيمكنني مساعدتك في:\n• معرفة خدماتنا\n• الأسعار والعروض\n• كيفية عمل \n• التواصل مع فريقنا\n\nما الذي يمكنني مساعدتك به بالتحديد؟`,
+    outOfScope: `أقدّر سؤالك، لكن هذا الموضوع خارج نطاق تخصصي. أنا VOX، مساعد متخصص في خدمات  الذكية.\n\nيمكنني مساعدتك في أي شيء يتعلق بخدماتنا. هل هناك شيء يتعلق ب يمكنني مساعدتك به؟ 🤝`,
+  },
+  en: {
+    services: `Our services include:\n\n🔗 **API & Systems Integration** — connect your tools automatically\n⚙️ **Workflow Building** — design smart, professional automation flows\n📧 **Marketing Automation** — email, Telegram, WhatsApp\n📊 **Data Dashboards** — auto reports in Google Sheets / Airtable\n🤖 **Chatbot Building** — exactly like this one!\n\nWould you like details on a specific service?`,
+    pricing: `Pricing depends on the project scope and complexity.\n\n📦 **Small projects:** Starting from $150\n🏗️ **Medium projects:** $300 – $800\n🏢 **Large projects:** Determined after consultation\n\nShare your project details and we'll give you an accurate quote. Want to get in touch?`,
+    contact: `We'd love to hear from you! 🎯\n\nI'll need a few details to connect you with our team:`,
+    automation: `Smart automation works like this:\n\n1️⃣ **Trigger** — an event starts the process (email, webhook, schedule)\n2️⃣ **Processing** — data is processed and transformed\n3️⃣ **Action** — the desired action is executed (send, save, notify)\n\nExample: "New client fills form → auto-added to CRM → receives welcome email → Telegram notification sent"\n\nWould you like a workflow example for your business?`,
+    default: `Thanks for your question! 🙏\n\nI'm VOX, specialized in answering questions about our automation services.\n\nI can help you with:\n• Our services overview\n• Pricing & offers\n• How automation works\n• Connecting with our team\n\nWhat specifically can I help you with?`,
+    outOfScope: `I appreciate your question, but that topic is outside my area of expertise. I'm VOX, a specialist assistant for smart automation services.\n\nI can assist with anything related to our services. Is there something about automation I can help you with? 🤝`,
+  },
+  fr: {
+    services: `Nos services comprennent:\n\n🔗 **Intégration API & Systèmes** — connectez vos outils automatiquement\n⚙️ **Construction de Workflows** — concevez des flux d'automatisation intelligents\n📧 **Automatisation Marketing** — email, Telegram, WhatsApp\n📊 **Tableaux de Bord** — rapports auto dans Google Sheets / Airtable\n🤖 **Création de Chatbots** — exactement comme celui-ci!\n\nVoulez-vous des détails sur un service spécifique?`,
+    pricing: `Les tarifs dépendent de la taille et la complexité du projet.\n\n📦 **Petits projets:** À partir de 150$\n🏗️ **Projets moyens:** 300$ – 800$\n🏢 **Grands projets:** Définis après consultation\n\nPartagez les détails de votre projet pour un devis précis. Souhaitez-vous nous contacter?`,
+    contact: `Nous serions ravis de vous entendre! 🎯\n\nJ'ai besoin de quelques informations pour vous connecter à notre équipe:`,
+    automation: `L'automatisation intelligente fonctionne ainsi:\n\n1️⃣ **Déclencheur** — un événement démarre le processus (email, webhook, planification)\n2️⃣ **Traitement** — les données sont traitées et transformées\n3️⃣ **Action** — l'action souhaitée est exécutée (envoyer, sauvegarder, notifier)\n\nExemple: "Nouveau client remplit un formulaire → ajouté auto au CRM → reçoit un email de bienvenue → notification Telegram"\n\nVoulez-vous un exemple de workflow pour votre activité?`,
+    default: `Merci pour votre question! 🙏\n\nJe suis VOX, spécialisé dans les services d'automatisation.\n\nJe peux vous aider avec:\n• Nos services\n• Les tarifs\n• Le fonctionnement de l'automatisation\n• Contacter notre équipe\n\nQue puis-je faire pour vous spécifiquement?`,
+    outOfScope: `J'apprécie votre question, mais ce sujet dépasse mon domaine de spécialité. Je suis VOX, assistant spécialisé en automatisation intelligente.\n\nJe peux vous aider pour tout ce qui concerne nos services. Y a-t-il quelque chose sur l'automatisation avec lequel je peux vous aider? 🤝`,
+  }
+};
+
+// ─── FUNCTIONS ───
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => { if(b.textContent.toLowerCase().includes(lang === 'ar' ? 'عربي' : lang)) b.classList.add('active'); });
+  const c = copy[lang];
+  document.getElementById('popup-text').innerHTML = c.popupText;
+  document.getElementById('hero-tag-text').textContent = c.heroTag;
+  document.getElementById('hero-h1').innerHTML = c.heroH1;
+  document.getElementById('hero-sub').textContent = c.heroSub;
+  document.getElementById('mode-tagline').textContent = c.modeTagline;
+  document.getElementById('mode-text-label').textContent = c.modeTextLabel;
+  document.getElementById('mode-text-desc').textContent = c.modeTextDesc;
+  document.getElementById('mode-voice-label').textContent = c.modeVoiceLabel;
+  document.getElementById('mode-voice-desc').textContent = c.modeVoiceDesc;
+  document.getElementById('mode-cancel-btn').textContent = c.modeCancel;
+  document.getElementById('btn-end-chat') && (document.getElementById('btn-end-chat').textContent = c.endChat);
+  document.getElementById('btn-end-voice') && (document.getElementById('btn-end-voice').textContent = c.endChat);
+  document.getElementById('chat-status-text') && (document.getElementById('chat-status-text').textContent = c.chatStatus);
+  document.getElementById('voice-title-text') && (document.getElementById('voice-title-text').textContent = c.voiceTitle);
+  document.getElementById('voice-status-text') && (document.getElementById('voice-status-text').textContent = c.voiceStatus);
+  document.getElementById('voice-hint-text') && (document.getElementById('voice-hint-text').textContent = c.voiceHint);
+  document.getElementById('chat-input') && (document.getElementById('chat-input').placeholder = c.inputPlaceholder);
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+}
+
+function openOverlay() {
+  document.getElementById('vox-popup').classList.add('hidden');
+  document.getElementById('vox-overlay').classList.add('open');
+  showModeSelect();
+}
+function closeOverlay() {
+  document.getElementById('vox-overlay').classList.remove('open');
+}
+function showModeSelect() {
+  document.getElementById('mode-select').style.display = 'block';
+  document.getElementById('chat-screen').classList.remove('screen-active');
+  document.getElementById('voice-screen').classList.remove('screen-active');
+  document.getElementById('voice-screen').style.display = 'none';
+  document.getElementById('chat-screen').style.display = 'none';
+}
+function openChat() {
+  document.getElementById('mode-select').style.display = 'none';
+  document.getElementById('chat-screen').style.display = 'flex';
+  const msgs = document.getElementById('messages');
+  if (msgs.children.length === 0) {
+    addBotMessage(copy[currentLang].welcome);
+    setTimeout(() => renderQuickReplies(), 600);
+  }
+}
+function openVoice() {
+  document.getElementById('mode-select').style.display = 'none';
+  document.getElementById('voice-screen').style.display = 'flex';
+  setVoiceTranscript('...', true);
+  setVoiceStatus(copy[currentLang].voiceStatus);
+  // Pre-load VAPI SDK in the background
+  loadVapiSDK().catch(() => {});
+}
+function endChat() {
+  isRecording = false;
+  if (recognition) try { recognition.stop(); } catch(e) {}
+  stopVapiCall();
+  closeOverlay();
+  setTimeout(() => {
+    showModeSelect();
+    document.getElementById('messages').innerHTML = '';
+    document.getElementById('quick-replies').innerHTML = '';
+    conversationHistory = [];
+    awaitingLead = false;
+    document.getElementById('voice-btn').classList.remove('recording');
+    document.getElementById('wave-bars').classList.remove('active');
+  }, 300);
+}
+
+function addBotMessage(text, extraHTML) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  div.innerHTML = `<div class="msg-avatar">V</div><div class="msg-bubble">${formatted}${extraHTML||''}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function addUserMessage(text) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.innerHTML = `<div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot'; div.id = 'typing-msg';
+  div.innerHTML = '<div class="msg-avatar">V</div><div class="msg-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function hideTyping() {
+  const t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+function renderQuickReplies() {
+  const qr = document.getElementById('quick-replies');
+  qr.innerHTML = '';
+  copy[currentLang].quickReplies.forEach(r => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-btn';
+    btn.textContent = r;
+    btn.onclick = () => { qr.innerHTML = ''; processUserInput(r); };
+    qr.appendChild(btn);
+  });
+}
+
+function getAIResponse(input) {
+  const r = aiResponses[currentLang];
+  const lower = input.toLowerCase();
+  if (/خدم|service|servic|what do you|ماذا تقدم|تقدم|offer/i.test(lower)) return { text: r.services };
+  if (/سعر|كلف|تكلف|price|cost|tarif|combien|كم/i.test(lower)) return { text: r.pricing };
+  if (/تواصل|اتصل|contact|join|message|reach|كلم|joindre/i.test(lower)) return { text: r.contact, showLead: true };
+  if (/أتمت|automat|workflow|كيف تعمل|how.+work|comment.+fonctionne/i.test(lower)) return { text: r.automation };
+  if (/شكر|thank|merci|hello|مرحب|سلام|bonjour|hi\b|hey\b/i.test(lower)) return { text: r.default };
+  return { text: r.outOfScope };
+}
+
+function processUserInput(text) {
+  addUserMessage(text);
+  document.getElementById('quick-replies').innerHTML = '';
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    const resp = getAIResponse(text);
+    if (resp.showLead) {
+      addBotMessage(resp.text, renderLeadForm());
+      awaitingLead = true;
+    } else {
+      addBotMessage(resp.text);
+    }
+  }, 900 + Math.random() * 600);
+}
+
+function renderLeadForm() {
+  return `<div class="lead-form" style="margin-top:0.8rem">
+    <h4>📋 ${currentLang==='ar'?'معلومات التواصل':currentLang==='fr'?'Informations de contact':'Contact Information'}</h4>
+    <input type="text" id="lead-name" placeholder="${currentLang==='ar'?'اسمك الكريم':currentLang==='fr'?'Votre nom':'Your name'}">
+    <input type="email" id="lead-email" placeholder="${currentLang==='ar'?'بريدك الإلكتروني':currentLang==='fr'?'Votre email':'Your email'}">
+    <input type="text" id="lead-msg" placeholder="${currentLang==='ar'?'وصف مشروعك باختصار':currentLang==='fr'?'Décrivez votre projet':'Describe your project'}">
+    <button class="lead-submit" onclick="submitLead()">
+      ${currentLang==='ar'?'إرسال ← سنتواصل معك قريبًا':currentLang==='fr'?'Envoyer → Nous vous contacterons':'Send → We\'ll reach out soon'}
+    </button>
+  </div>`;
+}
+
+function submitLead() {
+  const name = document.getElementById('lead-name')?.value;
+  const email = document.getElementById('lead-email')?.value;
+  const msg = document.getElementById('lead-msg')?.value;
+  if (!name || !email) {
+    alert(currentLang==='ar'?'يرجى ملء الاسم والبريد الإلكتروني':currentLang==='fr'?'Veuillez remplir le nom et l\'email':'Please fill in name and email');
+    return;
+  }
+  const payload = { name, email, message: msg, language: currentLang, timestamp: new Date().toISOString() };
+  console.log('📤 Lead payload:', payload);
+  // fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+  const successMsg = { ar: `✅ شكرًا ${name}! تم استلام طلبك وسنتواصل معك على ${email} في أقرب وقت. 🚀`, en: `✅ Thank you ${name}! We received your request and will reach out to ${email} very soon. 🚀`, fr: `✅ Merci ${name}! Votre demande a été reçue, nous vous contacterons à ${email} très bientôt. 🚀` };
+  addBotMessage(successMsg[currentLang]);
+  awaitingLead = false;
+}
+
+function sendMessage() {
+  const inp = document.getElementById('chat-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = ''; inp.style.height = '';
+  processUserInput(text);
+}
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el) { el.style.height = ''; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
+
+// ─── VAPI VOICE ───
+const VAPI_ASSISTANT_ID = '31391dfd-785f-43e1-aaf3-feefabe16743';
+let vapiCallActive = false;
+let vapiReady = false;
+
+// Load VAPI HTML-Script-Tag SDK
+function loadVapiSDK() {
+  return new Promise((resolve, reject) => {
+    if (window.vapiSDK) { vapiReady = true; resolve(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
+    script.defer = true;
+    script.async = true;
+    script.onload = () => {
+      // Wait a tick for vapiSDK to be available
+      setTimeout(() => { vapiReady = true; resolve(); }, 300);
+    };
+    script.onerror = () => reject(new Error('Failed to load voice SDK'));
+    document.head.appendChild(script);
+  });
+}
+
+function setVoiceStatus(text) {
+  const el = document.getElementById('voice-status-text');
+  if (el) el.textContent = text;
+}
+function setVoiceTranscript(text, empty = false) {
+  const el = document.getElementById('voice-transcript');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.toggle('empty', empty);
+}
+function setRecordingUI(active) {
+  document.getElementById('voice-btn').classList.toggle('recording', active);
+  document.getElementById('wave-bars').classList.toggle('active', active);
+}
+
+async function toggleRecording() {
+  if (vapiCallActive) {
+    stopVapiCall();
+  } else {
+    await startVapiCall();
+  }
+}
+
+async function startVapiCall() {
+  setVoiceTranscript('...', true);
+  setVoiceStatus(currentLang==='ar' ? 'جارٍ التحميل...' : currentLang==='fr' ? 'Chargement...' : 'Loading...');
+
+  try {
+    await loadVapiSDK();
+  } catch(e) {
+    setVoiceTranscript(
+      currentLang==='ar' ? 'فشل تحميل خدمة الصوت. تحقق من اتصالك.' :
+      currentLang==='fr' ? 'Échec du chargement du service vocal.' :
+      'Failed to load voice service. Check your connection.',
+      false
+    );
+    setVoiceStatus(copy[currentLang].voiceStatus);
+    return;
+  }
+
+  try {
+    if (!window.vapiSDK) throw new Error('vapiSDK not available');
+
+    // Run the VAPI assistant
+    const vapi = window.vapiSDK.run({
+      apiKey: 'e7599e5e-a966-4c6b-83bc-f518f673de57',
+      assistant: '31391dfd-785f-43e1-aaf3-feefabe16743',
+      //config: {
+      // position: 'bottom-right',
+      // theme: { primary: '#7c3aed', secondary: '#ffffff' }
+      //}
+    }); 
+
+    vapiCallActive = true;
+    setRecordingUI(true);
+    setVoiceStatus(copy[currentLang].voiceListening);
+    setVoiceTranscript(
+      currentLang==='ar' ? 'المساعد الصوتي نشط. يمكنك التحدث الآن.' :
+      currentLang==='fr' ? 'Assistant vocal actif. Vous pouvez parler.' :
+      'Voice assistant active. You can speak now.',
+      false
+    );
+
+    // Listen to vapi events if supported
+    if (vapi && typeof vapi.on === 'function') {
+      vapi.on('call-start', () => {
+        vapiCallActive = true;
+        setRecordingUI(true);
+        setVoiceStatus(copy[currentLang].voiceListening);
+      });
+
+      vapi.on('speech-start', () => {
+        setRecordingUI(true);
+        setVoiceStatus(copy[currentLang].voiceListening);
+      });
+
+      vapi.on('speech-end', () => {
+        setVoiceStatus(copy[currentLang].voiceProcessing);
+      });
+
+      vapi.on('message', (msg) => {
+        if (msg.type === 'transcript') {
+          const role = msg.role;
+          const text = msg.transcript || '';
+          if (text) {
+            const prefix = role === 'user'
+              ? (currentLang==='ar' ? 'أنت: ' : currentLang==='fr' ? 'Vous: ' : 'You: ')
+              : 'VOX: ';
+            setVoiceTranscript(prefix + text, false);
+            if (role === 'assistant') setVoiceStatus(copy[currentLang].voiceStatus);
+          }
+        }
+      });
+
+      vapi.on('call-end', () => {
+        vapiCallActive = false;
+        setRecordingUI(false);
+        setVoiceStatus(copy[currentLang].voiceStatus);
+        setVoiceTranscript(
+          currentLang==='ar' ? 'انتهت المحادثة. اضغط للمحادثة مجددًا.' :
+          currentLang==='fr' ? 'Appel terminé. Appuyez pour rappeler.' :
+          'Call ended. Press to call again.',
+          false
+        );
+      });
+
+      vapi.on('error', (err) => {
+        console.error('Voice error:', err);
+        vapiCallActive = false;
+        setRecordingUI(false);
+        setVoiceStatus(copy[currentLang].voiceStatus);
+        setVoiceTranscript(
+          currentLang==='ar' ? '⚠️ حدث خطأ. حاول مرة أخرى.' :
+          currentLang==='fr' ? '⚠️ Erreur. Réessayez.' :
+          '⚠️ Error. Please try again.',
+          false
+        );
+      });
+    }
+
+  } catch(e) {
+    console.error('Voice start error:', e);
+    vapiCallActive = false;
+    setRecordingUI(false);
+    setVoiceTranscript(
+      currentLang==='ar' ? '⚠️ تعذّر بدء الاتصال. حاول مرة أخرى.' :
+      currentLang==='fr' ? '⚠️ Impossible de démarrer. Réessayez.' :
+      '⚠️ Could not start. Please try again.',
+      false
+    );
+    setVoiceStatus(copy[currentLang].voiceStatus);
+  }
+}
+
+function stopVapiCall() {
+  vapiCallActive = false;
+  setRecordingUI(false);
+  setVoiceStatus(copy[currentLang].voiceStatus);
+  setVoiceTranscript(
+    currentLang==='ar' ? 'تم إيقاف المحادثة.' :
+    currentLang==='fr' ? 'Appel arrêté.' :
+    'Call stopped.',
+    false
+  );
+}
+
+// ─── POPUP TIMING ───
+setTimeout(() => {
+  const p = document.getElementById('vox-popup');
+  if (p) { p.classList.remove('hidden'); setTimeout(() => p.classList.add('hidden'), 6000); }
+}, 2000);
+</script>
+</body>
+</html>
