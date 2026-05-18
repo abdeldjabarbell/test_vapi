@@ -166,361 +166,294 @@ h1 span{color:#a78bfa}
 <body>
 
 <nav>
-    <div class="logo">VOX</div>
-    <div class="langs">
-      <button class="lang-btn on" data-lang="ar">عربي</button>
-      <button class="lang-btn" data-lang="en">EN</button>
-      <button class="lang-btn" data-lang="fr">FR</button>
+  <div class="logo">VOX</div>
+  <div class="langs">
+    <button class="lang-btn on" data-lang="ar">عربي</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag"><span class="dot"></span><span id="t-tag">وكالة أتمتة متقدمة</span></div>
+  <h1 id="t-h1">نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span></h1>
+  <p class="sub" id="t-sub">حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.</p>
+</div>
+
+<button id="fab" aria-label="VOX">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</button>
+
+<div id="bubble">
+  <button id="bubble-x" aria-label="close">✕</button>
+  <span id="t-bubble">👋 مرحبًا! أنا <strong>VOX</strong> — اضغط لنبدأ</span>
+</div>
+
+<div id="overlay">
+  <div id="mode-screen">
+    <div class="big-logo">VOX</div>
+    <p class="tagline" id="t-tagline">مساعدك الذكي لخدمات الأتمتة</p>
+
+    <div class="cards">
+      <div class="card" id="open-voice">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+          </svg>
+        </div>
+        <div class="card-lbl" id="t-vl">محادثة صوتية</div>
+        <div class="card-desc" id="t-vd">تحدث مع VOX مباشرة</div>
+      </div>
     </div>
-  </nav>
 
-  <div class="hero">
-    <div class="hero-tag"><span class="dot"></span><span id="t-tag">وكالة أتمتة متقدمة</span></div>
-    <h1 id="t-h1">نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span></h1>
-    <p class="sub" id="t-sub">حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.</p>
+    <button class="btn-cancel" id="btn-cancel">إلغاء</button>
   </div>
 
-  <button id="fab" aria-label="VOX">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-    </svg>
-  </button>
-
-  <div id="bubble">
-    <button id="bubble-x" aria-label="close">✕</button>
-    <span id="t-bubble">👋 مرحبًا! أنا <strong>VOX</strong> — اضغط لنبدأ</span>
-  </div>
-
-  <div id="overlay">
-    <div id="mode-screen">
-      <div class="big-logo">VOX</div>
-      <p class="tagline" id="t-tagline">مساعدك الذكي لخدمات الأتمتة</p>
-
-      <div class="cards">
-        <div class="card" id="open-voice">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-            </svg>
+  <div id="voice-screen">
+    <div class="voice-top">
+      <div class="voice-top-left">
+        <div class="voice-brand">VOX</div>
+        <div class="voice-meta">
+          <div class="voice-title">VOX AI</div>
+          <div class="voice-status">
+            <span class="sdot"></span>
+            <span id="t-vstat">جاهز للاستماع</span>
           </div>
-          <div class="card-lbl" id="t-vl">محادثة صوتية</div>
-          <div class="card-desc" id="t-vd">تحدث مع VOX مباشرة</div>
         </div>
       </div>
-
-      <button class="btn-cancel" id="btn-cancel">إلغاء</button>
+      <button class="btn-cancel" id="btn-end">إنهاء</button>
     </div>
 
-    <div id="voice-screen">
-      <div class="voice-top">
-        <div class="voice-top-left">
-          <div class="voice-brand">VOX</div>
-          <div class="voice-meta">
-            <div class="voice-title">VOX AI</div>
-            <div class="voice-status">
-              <span class="sdot"></span>
-              <span id="t-vstat">جاهز للاستماع</span>
-            </div>
-          </div>
-        </div>
-        <button class="btn-cancel" id="btn-end">إنهاء</button>
+    <div class="voice-body">
+      <div class="rings">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <button id="vbtn" aria-label="toggle call">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+          </svg>
+        </button>
       </div>
 
-      <div class="voice-body">
-        <div class="rings">
-          <div class="ring"></div><div class="ring"></div><div class="ring"></div>
-          <button id="vbtn" aria-label="toggle call">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="wave" id="wave">
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        </div>
-
-        <p class="v-hint" id="t-vhint">اضغط على الدائرة للتحدث</p>
-        <div class="vtx dim" id="vtx">...</div>
+      <div class="wave" id="wave">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
       </div>
+
+      <p class="v-hint" id="t-vhint">اضغط على الدائرة للتحدث</p>
+      <div class="vtx dim" id="vtx">...</div>
     </div>
   </div>
+</div>
 
+<!-- Load Vapi SDK as ESM and expose constructor -->
 <script type="module">
   import Vapi from "https://unpkg.com/@vapi-ai/web@2.2.7?module";
-  window.Vapi = Vapi;
+  window.VapiCtor = Vapi;
 </script>
-  
-  <script>
-     /* ===========================
-      CONFIG (CHANGE THIS ONLY)
-      =========================== */
-   const VAPI_PUBLIC_KEY = "e7599e5e-a966-4c6b-83bc-f518f673de57"; // Vapi Dashboard -> API Keys -> Public
-   const ASST_ID = "31391dfd-785f-43e1-aaf3-feefabe16743";     // your assistant id
-   
-   /* STATE */
-   let lang = "ar";
-   let vapi = null;
-   let callOn = false;
-   
-   /* DOM helpers */
-   const $id = (id) => document.getElementById(id);
-   const setText = (id, v) => { const e = $id(id); if (e) e.textContent = v; };
-   const setHTML = (id, v) => { const e = $id(id); if (e) e.innerHTML = v; };
-   
-   /* Load Vapi Web SDK */
-   function loadVapiSDK() {
-     return new Promise((resolve) => {
-       if (typeof window.Vapi !== "undefined") return resolve(true);
-   
-       const script = document.createElement("script");
-       script.src = "https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi-web.min.js";
-       script.async = true;
-       script.onerror = () => resolve(false);
-       script.onload = () => setTimeout(() => resolve(typeof window.Vapi !== "undefined"), 300);
-       document.head.appendChild(script);
-     });
-   }
-   loadVapiSDK();
-   
-   /* Translations used by the UI */
-   const T = {
-     ar:{
-       tag:"وكالة أتمتة متقدمة",
-       h1:"نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span>",
-       sub:"حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.",
-       bubble:"👋 مرحبًا! أنا <strong>VOX</strong> — اضغط لنبدأ",
-       tagline:"مساعدك الذكي لخدمات الأتمتة",
-       vl:"محادثة صوتية", vd:"تحدث مع VOX مباشرة",
-       cancel:"إلغاء", end:"إنهاء",
-       vstat:"جاهز للاستماع", vhint:"اضغط على الدائرة للتحدث",
-       listening:"جارٍ الاستماع...", processing:"جارٍ المعالجة...",
-       connecting:"جارٍ الاتصال...",
-       callActive:"الاتصال نشط — تحدث الآن",
-       callEnded:"انتهى الاتصال. اضغط للبدء مجدداً.",
-       callStopped:"تم إيقاف الاتصال.",
-       errNoSDK:"❌ مكتبة Vapi غير متوفرة. تحقق من الإنترنت.",
-       errStart:"❌ تعذّر بدء الاتصال. تأكد من توفر الميكروفون.",
-       errCall:"⚠️ خطأ في الاتصال. حاول مرة أخرى."
-     },
-     en:{
-       tag:"Advanced Automation Agency",
-       h1:"Automate your business<br>with <span>AI power</span>",
-       sub:"Smart automation, API integrations, and professional digital services — freeing your time for what matters.",
-       bubble:"👋 Hi! I'm <strong>VOX</strong> — click to start",
-       tagline:"Your AI assistant for automation services",
-       vl:"Voice Chat", vd:"Talk to VOX directly",
-       cancel:"Cancel", end:"End",
-       vstat:"Ready to listen", vhint:"Tap the circle to speak",
-       listening:"Listening...", processing:"Processing...",
-       connecting:"Connecting...",
-       callActive:"Call active — speak now",
-       callEnded:"Call ended. Press to start again.",
-       callStopped:"Call stopped.",
-       errNoSDK:"❌ Vapi library unavailable. Check internet.",
-       errStart:"❌ Failed to start call. Check microphone access.",
-       errCall:"⚠️ Call error. Try again."
-     },
-     fr:{
-       tag:"Agence d'automatisation intelligente",
-       h1:"Automatisez votre business<br>avec <span>l'IA</span>",
-       sub:"Automatisations intelligentes, intégrations API, services numériques — nous libérons votre temps.",
-       bubble:"👋 Bonjour! Je suis <strong>VOX</strong> — cliquez pour commencer",
-       tagline:"Votre assistant IA pour l'automatisation",
-       vl:"Chat Vocal", vd:"Parlez à VOX directement",
-       cancel:"Annuler", end:"Terminer",
-       vstat:"Prêt à écouter", vhint:"Appuyez sur le cercle pour parler",
-       listening:"En écoute...", processing:"Traitement...",
-       connecting:"Connexion...",
-       callActive:"Appel actif — parlez maintenant",
-       callEnded:"Appel terminé. Appuyez pour recommencer.",
-       callStopped:"Appel arrêté.",
-       errNoSDK:"❌ Bibliothèque Vapi indisponible. Vérifiez le réseau.",
-       errStart:"❌ Impossible de démarrer. Vérifiez le micro.",
-       errCall:"⚠️ Erreur d'appel. Réessayez."
-     }
-   };
-   
-   /* UI helpers */
-   function setVTx(txt, dim) {
-     const el = $id("vtx");
-     if (!el) return;
-     el.textContent = txt;
-     el.classList.toggle("dim", !!dim);
-   }
-   function setCallUI(on) {
-     $id("vbtn")?.classList.toggle("active", !!on);
-     $id("wave")?.classList.toggle("on", !!on);
-   }
-   
-   /* Overlay / screens */
-   function closeBubble(){ $id("bubble")?.classList.add("hide"); }
-   
-   function showMode() {
-     const mode = $id("mode-screen");
-     const voice = $id("voice-screen");
-     if (mode) mode.style.display = "block";
-     if (voice) voice.style.display = "none";
-   }
-   
-   function openOverlay() {
-     closeBubble();
-     $id("overlay")?.classList.add("open");
-     showMode();
-   }
-   
-   function openVoice() {
-     const mode = $id("mode-screen");
-     const voice = $id("voice-screen");
-     if (mode) mode.style.display = "none";
-     if (voice) voice.style.display = "flex";
-     setVTx("...", true);
-     setText("t-vstat", T[lang].vstat);
-   }
-   
-   function closeAll() {
-     if (callOn && vapi) { try { vapi.stop(); } catch(e){} }
-     callOn = false;
-     setCallUI(false);
-   
-     $id("overlay")?.classList.remove("open");
-   
-     setTimeout(() => {
-       showMode();
-       setVTx("...", true);
-       setText("t-vstat", T[lang].vstat);
-     }, 300);
-   }
-   
-   /* Language */
-   function setLang(l) {
-     lang = l;
-     document.documentElement.lang = l;
-     document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
-   
-     document.querySelectorAll(".lang-btn").forEach((b) => {
-       b.classList.toggle("on", b.dataset.lang === l);
-     });
-   
-     const t = T[l];
-     setText("t-tag", t.tag);
-     setHTML("t-h1", t.h1);
-     setText("t-sub", t.sub);
-     setHTML("t-bubble", t.bubble);
-     setText("t-tagline", t.tagline);
-     setText("t-vl", t.vl);
-     setText("t-vd", t.vd);
-     setText("btn-cancel", t.cancel);
-     setText("btn-end", t.end);
-     setText("t-vstat", t.vstat);
-     setText("t-vhint", t.vhint);
-   }
-   
-   /* Vapi init */
-   async function initVapi() {
-     if (vapi) return vapi;
-   
-     const loaded = await loadVapiSDK();
-     if (!loaded || typeof window.Vapi === "undefined") throw new Error(T[lang].errNoSDK);
-     if (!VAPI_PUBLIC_KEY || VAPI_PUBLIC_KEY.includes("PASTE_")) throw new Error("Missing VAPI_PUBLIC_KEY");
-   
-     vapi = new window.Vapi(VAPI_PUBLIC_KEY);
-   
-     vapi.on("call-start", () => {
-       callOn = true;
-       setCallUI(true);
-       setText("t-vstat", T[lang].listening);
-       setVTx(T[lang].callActive, false);
-     });
-   
-     vapi.on("speech-end", () => {
-       setText("t-vstat", T[lang].processing);
-     });
-   
-     vapi.on("message", (msg) => {
-       if (msg.type === "transcript" && msg.transcript) {
-         const who = msg.role === "user"
-           ? (lang === "ar" ? "أنت: " : lang === "fr" ? "Vous: " : "You: ")
-           : "VOX: ";
-         setVTx(who + msg.transcript, false);
-         if (msg.role === "assistant") setText("t-vstat", T[lang].vstat);
-       }
-     });
-   
-     vapi.on("call-end", () => {
-       callOn = false;
-       setCallUI(false);
-       setText("t-vstat", T[lang].vstat);
-       setVTx(T[lang].callEnded, false);
-     });
-   
-     vapi.on("error", () => {
-       callOn = false;
-       setCallUI(false);
-       setText("t-vstat", T[lang].vstat);
-       setVTx(T[lang].errCall, false);
-     });
-   
-     return vapi;
-   }
-   
-   /* Call toggle */
-   async function toggleCall() {
-     if (callOn) {
-       try { if (vapi) vapi.stop(); } catch(e){}
-       callOn = false;
-       setCallUI(false);
-       setVTx(T[lang].callStopped, false);
-       setText("t-vstat", T[lang].vstat);
-       return;
-     }
-   
-     setVTx(T[lang].connecting, true);
-     setText("t-vstat", T[lang].connecting);
-   
-     try {
-       const instance = await initVapi();
-       await instance.start(ASST_ID);
-     } catch (err) {
-       callOn = false;
-       setCallUI(false);
-       setText("t-vstat", T[lang].vstat);
-       setVTx(T[lang].errStart + (err?.message ? ` (${err.message})` : ""), false);
-     }
-   }
-   
-   /* Wire UI events */
-   document.addEventListener("DOMContentLoaded", () => {
-     // bubble show/hide
-     setTimeout(() => {
-       $id("bubble")?.classList.remove("hide");
-       setTimeout(() => closeBubble(), 6000);
-     }, 2000);
-   
-     $id("bubble-x")?.addEventListener("click", closeBubble);
-     $id("fab")?.addEventListener("click", openOverlay);
-     $id("open-voice")?.addEventListener("click", openVoice);
-   
-     $id("btn-cancel")?.addEventListener("click", closeAll);
-     $id("btn-end")?.addEventListener("click", closeAll);
-     $id("vbtn")?.addEventListener("click", toggleCall);
-   
-     document.querySelectorAll(".lang-btn").forEach((b) => {
-       b.addEventListener("click", () => setLang(b.dataset.lang));
-     });
-   });
-   
-   /* Optional: expose for inline handlers if any remain */
-   window.setLang = setLang;
-   window.openOverlay = openOverlay;
-   window.openVoice = openVoice;
-   window.closeAll = closeAll;
-   window.toggleCall = toggleCall;
-   </script>
- </body>
-</html>
+
+<script>
+/* ===========================
+   CONFIG (CHANGE THIS ONLY)
+   =========================== */
+const VAPI_PUBLIC_KEY = "e7599e5e-a966-4c6b-83bc-f518f673de57"; // public key
+const ASST_ID = "31391dfd-785f-43e1-aaf3-feefabe16743";        // assistant id
+
+let lang = "ar";
+let vapi = null;
+let callOn = false;
+
+const $id = (id) => document.getElementById(id);
+const setText = (id, v) => { const e = $id(id); if (e) e.textContent = v; };
+const setHTML = (id, v) => { const e = $id(id); if (e) e.innerHTML = v; };
+
+const T = {
+  ar:{ tag:"وكالة أتمتة متقدمة", h1:"نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span>", sub:"حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.",
+    bubble:"👋 مرحبًا! أنا <strong>VOX</strong> — اضغط لنبدأ", tagline:"مساعدك الذكي لخدمات الأتمتة", vl:"محادثة صوتية", vd:"تحدث مع VOX مباشرة",
+    cancel:"إلغاء", end:"إنهاء", vstat:"جاهز للاستماع", vhint:"اضغط على الدائرة للتحدث",
+    listening:"جارٍ الاستماع...", processing:"جارٍ المعالجة...", connecting:"جارٍ الاتصال...",
+    callActive:"الاتصال نشط — تحدث الآن", callEnded:"انتهى الاتصال. اضغط للبدء مجدداً.", callStopped:"تم إيقاف الاتصال.",
+    errNoSDK:"❌ Vapi SDK not ready yet. Try again in 1s.", errStart:"❌ تعذّر بدء الاتصال. تأكد من توفر الميكروفون.", errCall:"⚠️ خطأ في الاتصال. حاول مرة أخرى." },
+  en:{ tag:"Advanced Automation Agency", h1:"Automate your business<br>with <span>AI power</span>", sub:"Smart automation, API integrations, and professional digital services — freeing your time for what matters.",
+    bubble:"👋 Hi! I'm <strong>VOX</strong> — click to start", tagline:"Your AI assistant for automation services", vl:"Voice Chat", vd:"Talk to VOX directly",
+    cancel:"Cancel", end:"End", vstat:"Ready to listen", vhint:"Tap the circle to speak",
+    listening:"Listening...", processing:"Processing...", connecting:"Connecting...",
+    callActive:"Call active — speak now", callEnded:"Call ended. Press to start again.", callStopped:"Call stopped.",
+    errNoSDK:"❌ Vapi SDK not ready yet. Try again in 1s.", errStart:"❌ Failed to start call. Check microphone access.", errCall:"⚠️ Call error. Try again." },
+  fr:{ tag:"Agence d'automatisation intelligente", h1:"Automatisez votre business<br>avec <span>l'IA</span>", sub:"Automatisations intelligentes, intégrations API, services numériques — nous libérons votre temps.",
+    bubble:"👋 Bonjour! Je suis <strong>VOX</strong> — cliquez pour commencer", tagline:"Votre assistant IA pour l'automatisation", vl:"Chat Vocal", vd:"Parlez à VOX directement",
+    cancel:"Annuler", end:"Terminer", vstat:"Prêt à écouter", vhint:"Appuyez sur le cercle pour parler",
+    listening:"En écoute...", processing:"Traitement...", connecting:"Connexion...",
+    callActive:"Appel actif — parlez maintenant", callEnded:"Appel terminé. Appuyez pour recommencer.", callStopped:"Appel arrêté.",
+    errNoSDK:"❌ SDK Vapi pas prêt. Réessaie dans 1s.", errStart:"❌ Impossible de démarrer. Vérifiez le micro.", errCall:"⚠️ Erreur d'appel. Réessayez." }
+};
+
+function setVTx(txt, dim) {
+  const el = $id("vtx");
+  if (!el) return;
+  el.textContent = txt;
+  el.classList.toggle("dim", !!dim);
+}
+function setCallUI(on) {
+  $id("vbtn")?.classList.toggle("active", !!on);
+  $id("wave")?.classList.toggle("on", !!on);
+}
+
+/* Overlay */
+function closeBubble(){ $id("bubble")?.classList.add("hide"); }
+
+function showMode() {
+  const mode = $id("mode-screen");
+  const voice = $id("voice-screen");
+  if (mode) mode.style.display = "block";
+  if (voice) voice.style.display = "none";
+}
+function openOverlay() {
+  closeBubble();
+  $id("overlay")?.classList.add("open");
+  showMode();
+}
+function openVoice() {
+  const mode = $id("mode-screen");
+  const voice = $id("voice-screen");
+  if (mode) mode.style.display = "none";
+  if (voice) voice.style.display = "flex";
+  setVTx("...", true);
+  setText("t-vstat", T[lang].vstat);
+}
+function closeAll() {
+  if (callOn && vapi) { try { vapi.stop(); } catch(e){} }
+  callOn = false;
+  setCallUI(false);
+  $id("overlay")?.classList.remove("open");
+  setTimeout(() => {
+    showMode();
+    setVTx("...", true);
+    setText("t-vstat", T[lang].vstat);
+  }, 300);
+}
+
+/* Language */
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+
+  document.querySelectorAll(".lang-btn").forEach((b) => {
+    b.classList.toggle("on", b.dataset.lang === l);
+  });
+
+  const t = T[l];
+  setText("t-tag", t.tag);
+  setHTML("t-h1", t.h1);
+  setText("t-sub", t.sub);
+  setHTML("t-bubble", t.bubble);
+  setText("t-tagline", t.tagline);
+  setText("t-vl", t.vl);
+  setText("t-vd", t.vd);
+  setText("btn-cancel", t.cancel);
+  setText("btn-end", t.end);
+  setText("t-vstat", t.vstat);
+  setText("t-vhint", t.vhint);
+}
+
+/* Vapi init */
+function initVapiOrThrow() {
+  if (vapi) return vapi;
+  if (!window.VapiCtor) throw new Error(T[lang].errNoSDK);
+
+  vapi = new window.VapiCtor(VAPI_PUBLIC_KEY);
+
+  vapi.on("call-start", () => {
+    callOn = true;
+    setCallUI(true);
+    setText("t-vstat", T[lang].listening);
+    setVTx(T[lang].callActive, false);
+  });
+
+  vapi.on("speech-end", () => setText("t-vstat", T[lang].processing));
+
+  vapi.on("message", (msg) => {
+    if (msg?.type === "transcript" && msg?.transcript) {
+      const who = msg.role === "user"
+        ? (lang === "ar" ? "أنت: " : lang === "fr" ? "Vous: " : "You: ")
+        : "VOX: ";
+      setVTx(who + msg.transcript, false);
+      if (msg.role === "assistant") setText("t-vstat", T[lang].vstat);
+    }
+  });
+
+  vapi.on("call-end", () => {
+    callOn = false;
+    setCallUI(false);
+    setText("t-vstat", T[lang].vstat);
+    setVTx(T[lang].callEnded, false);
+  });
+
+  vapi.on("error", () => {
+    callOn = false;
+    setCallUI(false);
+    setText("t-vstat", T[lang].vstat);
+    setVTx(T[lang].errCall, false);
+  });
+
+  return vapi;
+}
+
+/* Call toggle */
+async function toggleCall() {
+  if (callOn) {
+    try { vapi?.stop(); } catch(e){}
+    callOn = false;
+    setCallUI(false);
+    setVTx(T[lang].callStopped, false);
+    setText("t-vstat", T[lang].vstat);
+    return;
+  }
+
+  setVTx(T[lang].connecting, true);
+  setText("t-vstat", T[lang].connecting);
+
+  try {
+    const instance = initVapiOrThrow();
+    await instance.start(ASST_ID);
+  } catch (err) {
+    callOn = false;
+    setCallUI(false);
+    setText("t-vstat", T[lang].vstat);
+    setVTx(T[lang].errStart + (err?.message ? ` (${err.message})` : ""), false);
+  }
+}
+
+/* Wire UI events */
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    $id("bubble")?.classList.remove("hide");
+    setTimeout(() => closeBubble(), 6000);
+  }, 2000);
+
+  $id("bubble-x")?.addEventListener("click", closeBubble);
+  $id("fab")?.addEventListener("click", openOverlay);
+  $id("open-voice")?.addEventListener("click", openVoice);
+
+  $id("btn-cancel")?.addEventListener("click", closeAll);
+  $id("btn-end")?.addEventListener("click", closeAll);
+  $id("vbtn")?.addEventListener("click", toggleCall);
+
+  document.querySelectorAll(".lang-btn").forEach((b) => {
+    b.addEventListener("click", () => setLang(b.dataset.lang));
+  });
+});
+
+/* Expose (optional) */
+window.setLang = setLang;
+window.openOverlay = openOverlay;
+window.openVoice = openVoice;
+window.closeAll = closeAll;
+window.toggleCall = toggleCall;
+</script>
