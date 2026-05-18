@@ -360,9 +360,6 @@ h1 span{color:#a78bfa}
 
 </div>
 
-<!-- VAPI Web SDK — Version 2.5.0+ avec Daily.js compatible et chargement asynchrone -->
-<script async src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi-web.min.js"></script>
-
 <script>
 /* ══ CONFIG ══ */
 const VAPI_KEY = 'e7599e5e-a966-4c6b-83bc-f518f673de57';
@@ -370,41 +367,54 @@ const ASST_ID  = '31391dfd-785f-43e1-aaf3-feefabe16743';
 
 /* ══ STATE ══ */
 let lang    = 'ar';
-let vapiInst = null;   // single Vapi instance, reused
+let vapi    = null;
 let callOn  = false;
 let sending = false;
-let history = [];      // chat message history for context
-let vapiLoaded = false; // Flag pour vérifier si Vapi est chargé
+let history = [];
 
-/* ══ Attendre que Vapi se charge ══ */
-function waitForVapi() {
+/* ══ LOAD VAPI SDK - ROBUSTEMENT ══ */
+function loadVapiSDK() {
   return new Promise((resolve) => {
-    if (typeof Vapi !== 'undefined') {
-      vapiLoaded = true;
-      resolve();
+    // Si déjà chargé
+    if (typeof window.Vapi !== 'undefined') {
+      console.log('[VOX] ✅ Vapi SDK déjà en mémoire');
+      resolve(true);
       return;
     }
+
+    console.log('[VOX] ⏳ Chargement du SDK Vapi...');
     
-    const checkInterval = setInterval(() => {
-      if (typeof Vapi !== 'undefined') {
-        vapiLoaded = true;
-        clearInterval(checkInterval);
-        resolve();
-      }
-    }, 100);
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi-web.min.js';
+    script.async = true;
+    script.onerror = () => {
+      console.error('[VOX] ❌ Erreur lors du chargement du SDK');
+      resolve(false);
+    };
+    script.onload = () => {
+      // Vérifier que Vapi est disponible
+      setTimeout(() => {
+        if (typeof window.Vapi !== 'undefined') {
+          console.log('[VOX] ✅ SDK Vapi chargé avec succès');
+          resolve(true);
+        } else {
+          console.error('[VOX] ❌ Vapi SDK chargé mais non disponible');
+          resolve(false);
+        }
+      }, 500);
+    };
     
-    // Timeout après 10 secondes
-    setTimeout(() => {
-      clearInterval(checkInterval);
-      resolve();
-    }, 10000);
+    document.head.appendChild(script);
   });
 }
 
-// Initialiser Vapi dès que possible
-waitForVapi().then(() => {
-  console.log('✅ Vapi SDK chargé avec succès');
-});
+// Charger dès le démarrage
+loadVapiSDK();
+
+/* ══ LOG HELPER ══ */
+function logDebug(msg) {
+  console.log(`[VOX DEBUG] ${msg}`);
+}
 
 /* ══ TRANSLATIONS ══ */
 const T = {
@@ -426,17 +436,17 @@ const T = {
     callActive:'الاتصال نشط — تحدث الآن',
     callEnded:'انتهى الاتصال. اضغط للبدء مجدداً.',
     callStopped:'تم إيقاف الاتصال.',
-    errNoSDK:'فشل تحميل مكتبة الصوت — تحقق من اتصالك.',
-    errStart:'تعذّر بدء الاتصال — حاول مرة أخرى.',
-    errCall:'⚠️ خطأ في الاتصال — حاول مرة أخرى.',
-    errChat:'⚠️ خطأ في الاتصال. تحقق من الإنترنت وأعد المحاولة.',
-    fallback:'عذرًا، لم أفهم جيدًا. هل يمكنك إعادة الصياغة؟',
+    errNoSDK:'❌ مكتبة الصوت غير متوفرة. تحقق من الاتصال وحاول لاحقًا.',
+    errStart:'❌ تعذّر بدء الاتصال. تأكد من توفر الميكروفون.',
+    errCall:'⚠️ خطأ في الاتصال. حاول مرة أخرى.',
+    errChat:'⚠️ خطأ في الاتصال. تحقق من الإنترنت.',
+    fallback:'عذرًا، لم أفهم جيدًا.',
     leadTitle:'معلومات التواصل',
-    leadName:'اسمك الكريم', leadEmail:'بريدك الإلكتروني', leadMsg:'وصف مشروعك',
-    leadSend:'إرسال — سنتواصل معك قريبًا',
-    alertFields:'يرجى ملء الاسم والبريد الإلكتروني',
-    alertEmail:'البريد الإلكتروني غير صحيح',
-    thanks:(n,e)=>`✅ شكرًا ${n}! سنتواصل معك على ${e} قريبًا. 🚀`,
+    leadName:'اسمك', leadEmail:'بريدك', leadMsg:'وصف مشروعك',
+    leadSend:'إرسال',
+    alertFields:'يرجى ملء الاسم والبريد',
+    alertEmail:'بريد إلكتروني غير صحيح',
+    thanks:(n,e)=>`✅ شكرًا! سنتواصل معك على ${e}`,
   },
   en:{
     tag:'Advanced Automation Agency',
@@ -456,17 +466,17 @@ const T = {
     callActive:'Call active — speak now',
     callEnded:'Call ended. Press to start again.',
     callStopped:'Call stopped.',
-    errNoSDK:'Failed to load voice SDK — check your connection.',
-    errStart:'Could not start call — please try again.',
-    errCall:'⚠️ Call error — please try again.',
-    errChat:'⚠️ Connection error. Check your internet and retry.',
-    fallback:'Sorry, could you rephrase that?',
+    errNoSDK:'❌ Voice library unavailable. Check connection and try later.',
+    errStart:'❌ Failed to start call. Check microphone access.',
+    errCall:'⚠️ Call error. Try again.',
+    errChat:'⚠️ Connection error. Check internet.',
+    fallback:'Sorry, I didn\'t understand.',
     leadTitle:'Contact Information',
     leadName:'Your name', leadEmail:'Your email', leadMsg:'Describe your project',
-    leadSend:'Send — We\'ll reach out soon',
-    alertFields:'Please fill in name and email',
-    alertEmail:'Invalid email address',
-    thanks:(n,e)=>`✅ Thank you ${n}! We'll reach out to ${e} very soon. 🚀`,
+    leadSend:'Send',
+    alertFields:'Please fill name and email',
+    alertEmail:'Invalid email',
+    thanks:(n,e)=>`✅ Thank you! We\'ll reach out to ${e}`,
   },
   fr:{
     tag:'Agence d\'automatisation intelligente',
@@ -486,17 +496,17 @@ const T = {
     callActive:'Appel actif — parlez maintenant',
     callEnded:'Appel terminé. Appuyez pour recommencer.',
     callStopped:'Appel arrêté.',
-    errNoSDK:'Échec du chargement du SDK vocal — vérifiez votre connexion.',
-    errStart:'Impossible de démarrer — réessayez.',
-    errCall:'⚠️ Erreur d\'appel — réessayez.',
-    errChat:'⚠️ Erreur de connexion. Vérifiez votre réseau.',
-    fallback:'Désolé, pouvez-vous reformuler?',
+    errNoSDK:'❌ Bibliothèque vocale indisponible. Vérifiez la connexion.',
+    errStart:'❌ Impossible de démarrer. Vérifiez le micro.',
+    errCall:'⚠️ Erreur d\'appel. Réessayez.',
+    errChat:'⚠️ Erreur de connexion. Vérifiez le réseau.',
+    fallback:'Désolé, je n\'ai pas compris.',
     leadTitle:'Informations de contact',
     leadName:'Votre nom', leadEmail:'Votre email', leadMsg:'Décrivez votre projet',
-    leadSend:'Envoyer — Nous vous contacterons',
+    leadSend:'Envoyer',
     alertFields:'Veuillez remplir le nom et l\'email',
     alertEmail:'Email invalide',
-    thanks:(n,e)=>`✅ Merci ${n}! Nous vous contacterons à ${e} très bientôt. 🚀`,
+    thanks:(n,e)=>`✅ Merci! Nous vous contacterons à ${e}`,
   }
 };
 
@@ -555,8 +565,9 @@ function openVoice() {
   setText('t-vstat', T[lang].vstat);
 }
 function closeAll() {
-  // Stop voice if active
-  if (callOn && vapiInst) { try { vapiInst.stop(); } catch(e){} }
+  if (callOn && vapi) { 
+    try { vapi.stop(); } catch(e){}
+  }
   callOn = false; sending = false;
   setCallUI(false);
   $id('overlay').classList.remove('open');
@@ -593,7 +604,6 @@ function addUser(text) {
   const msgs = $id('msgs');
   const d = document.createElement('div');
   d.className = 'msg u';
-  // Escape to prevent XSS
   const safe = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   d.innerHTML = `<div class="mbub">${safe}</div>`;
   msgs.appendChild(d);
@@ -619,7 +629,7 @@ function showQR() {
   });
 }
 
-/* ══ CHAT — VAPI text completions ══ */
+/* ══ CHAT — VAPI ══ */
 async function processInput(text) {
   if (sending) return;
   sending = true;
@@ -629,11 +639,6 @@ async function processInput(text) {
   showTyping();
   try {
     history.push({ role:'user', content:text });
-    /*
-      VAPI chat completions endpoint.
-      Uses the assistant configured in your VAPI dashboard (system prompt, model, etc.)
-      Full docs: https://docs.vapi.ai/api-reference/chats/create
-    */
     const res = await fetch('https://api.vapi.ai/chat', {
       method: 'POST',
       headers: {
@@ -643,20 +648,12 @@ async function processInput(text) {
       body: JSON.stringify({
         assistantId: ASST_ID,
         input: { role:'user', content: text },
-        previousMessages: history.slice(0,-1) // all prior turns for context
+        previousMessages: history.slice(0,-1)
       })
     });
-    if (!res.ok) {
-      const err = await res.json().catch(()=>({}));
-      throw new Error(`${res.status}: ${err.message||''}`);
-    }
+    if (!res.ok) throw new Error(`${res.status}`);
     const data = await res.json();
-    // VAPI chat response field names
-    const reply = data.output?.content
-                  || data.output
-                  || data.message?.content
-                  || data.response
-                  || '';
+    const reply = data.output?.content || data.output || '';
     hideTyping();
     if (reply) {
       history.push({ role:'assistant', content:reply });
@@ -666,9 +663,8 @@ async function processInput(text) {
     }
   } catch(err) {
     hideTyping();
-    console.error('Chat error:', err);
     addBot(T[lang].errChat);
-    history.pop(); // remove failed user turn
+    history.pop();
   } finally {
     sending = false;
   }
@@ -703,98 +699,92 @@ function submitLead() {
   if (!name||!email)                          { alert(t.alertFields); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert(t.alertEmail); return; }
   const payload = { name, email, message:msg, language:lang, ts:new Date().toISOString() };
-  console.log('Lead captured:', payload);
-  // Uncomment to activate your webhook:
-  // fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  console.log('Lead:', payload);
   addBot(t.thanks(name, email));
 }
 
-/* ══ VOICE — VAPI Web SDK ══
-   Uses `new Vapi(apiKey)` from la version 2.5.0+
-   Docs: https://github.com/VapiAI/client-sdk-web
-   - NO UI is injected by this SDK.
-   - vapi.start(assistantId) → starts the call.
-   - vapi.stop()             → ends the call.
-   - Events: call-start, call-end, speech-start, speech-end, message, error
-*/
-function getVapi() {
-  if (vapiInst) return vapiInst;
-
-  if (!vapiLoaded || typeof Vapi === 'undefined') {
-    throw new Error('Vapi SDK not loaded');
+/* ══ VOICE — VAPI ══ */
+async function initVapi() {
+  if (vapi) return vapi;
+  
+  if (typeof window.Vapi === 'undefined') {
+    logDebug('Vapi not available, attempting reload...');
+    const loaded = await loadVapiSDK();
+    if (!loaded) throw new Error('Vapi SDK failed to load');
   }
 
-  vapiInst = new Vapi(VAPI_KEY);
+  logDebug('Initializing Vapi instance...');
+  vapi = new window.Vapi(VAPI_KEY);
 
-  vapiInst.on('call-start', () => {
+  vapi.on('call-start', () => {
+    logDebug('✅ Call started');
     callOn = true;
     setCallUI(true);
     setText('t-vstat', T[lang].listening);
     setVTx(T[lang].callActive, false);
   });
-  vapiInst.on('speech-start', () => {
-    setCallUI(true);
-    setText('t-vstat', T[lang].listening);
+
+  vapi.on('speech-start', () => {
+    logDebug('🎤 Speech detected');
   });
-  vapiInst.on('speech-end', () => {
+
+  vapi.on('speech-end', () => {
     setText('t-vstat', T[lang].processing);
   });
-  vapiInst.on('message', (m) => {
-    if (m.type === 'transcript' && m.transcript) {
-      const who = m.role==='user'
+
+  vapi.on('message', (msg) => {
+    if (msg.type === 'transcript' && msg.transcript) {
+      const who = msg.role==='user'
         ? (lang==='ar'?'أنت: ':lang==='fr'?'Vous: ':'You: ')
         : 'VOX: ';
-      setVTx(who + m.transcript, false);
-      if (m.role==='assistant') setText('t-vstat', T[lang].vstat);
+      setVTx(who + msg.transcript, false);
+      if (msg.role==='assistant') setText('t-vstat', T[lang].vstat);
     }
   });
-  vapiInst.on('call-end', () => {
+
+  vapi.on('call-end', () => {
+    logDebug('📞 Call ended');
     callOn = false;
     setCallUI(false);
     setText('t-vstat', T[lang].vstat);
     setVTx(T[lang].callEnded, false);
   });
-  vapiInst.on('error', (e) => {
-    console.error('VAPI voice error:', e);
+
+  vapi.on('error', (e) => {
+    logDebug('❌ Vapi Error: ' + JSON.stringify(e));
     callOn = false;
     setCallUI(false);
     setText('t-vstat', T[lang].vstat);
     setVTx(T[lang].errCall, false);
   });
 
-  return vapiInst;
+  return vapi;
 }
 
 async function toggleCall() {
   if (callOn) {
-    try { getVapi().stop(); } catch(e){}
+    try { if (vapi) vapi.stop(); } catch(e){}
     callOn = false;
     setCallUI(false);
     setVTx(T[lang].callStopped, false);
     setText('t-vstat', T[lang].vstat);
     return;
   }
-  
-  // Vérifier que Vapi est bien chargé avant de démarrer
-  if (!vapiLoaded || typeof Vapi === 'undefined') {
-    setVTx(T[lang].errNoSDK, false);
-    setText('t-vstat', T[lang].vstat);
-    return;
-  }
-  
-  // Start
-  setVTx('...', true);
+
+  logDebug('Attempting to start call...');
+  setVTx(T[lang].connecting, true);
   setText('t-vstat', T[lang].connecting);
+
   try {
-    await getVapi().start(ASST_ID);
-    // UI updated by 'call-start' event
-  } catch(e) {
-    console.error('toggleCall start error:', e);
+    const instance = await initVapi();
+    logDebug('Starting call with assistant: ' + ASST_ID);
+    await instance.start(ASST_ID);
+  } catch(err) {
+    logDebug('❌ Error: ' + err.message);
     callOn = false;
     setCallUI(false);
     setText('t-vstat', T[lang].vstat);
-    const noSDK = !vapiLoaded || typeof Vapi === 'undefined';
-    setVTx(noSDK ? T[lang].errNoSDK : T[lang].errStart, false);
+    setVTx(T[lang].errStart, false);
   }
 }
 
@@ -802,6 +792,7 @@ function setCallUI(on) {
   $id('vbtn').classList.toggle('active', on);
   $id('wave').classList.toggle('on', on);
 }
+
 function setVTx(txt, dim) {
   const el = $id('vtx');
   if (!el) return;
