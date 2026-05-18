@@ -253,8 +253,9 @@ h1 span{color:#a78bfa}
 
 <!-- Load Vapi SDK as ESM and expose constructor -->
 <script type="module">
-  import Vapi from "https://unpkg.com/@vapi-ai/web@2.2.7?module";
-  window.VapiCtor = Vapi;
+  import * as VapiPkg from "https://unpkg.com/@vapi-ai/web@2.2.7?module";
+  // selon le bundle, le constructeur peut être VapiPkg.Vapi ou VapiPkg.default
+  window.VapiCtor = VapiPkg.Vapi || VapiPkg.default || VapiPkg;
 </script>
 
 <script>
