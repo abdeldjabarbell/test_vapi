@@ -794,15 +794,34 @@ const copy = {
   }
 };
 
+// ─── AI RESPONSES ───
+const aiResponses = {
+  ar: {
+    services: `خدماتنا تشمل:\n\n🔗 **تكامل APIs والأنظمة** — ربط أدواتك ببعضها تلقائيًا\n⚙️ **بناء Workflows** — تصميم تدفقات عمل ذكية مع AI\n📧 **أتمتة التسويق** — ايميل، Telegram، WhatsApp\n📊 **لوحات بيانات** — تقارير تلقائية في Google Sheets / Airtable\n🤖 **بناء Chatbots** — مثل هذا بالضبط!\n\nهل تريد تفاصيل عن خدمة معينة؟`,
+    pricing: `التسعير يعتمد على حجم المشروع وتعقيده.\n\n📦 **مشاريع صغيرة:** تبدأ من 150$\n🏗️ **مشاريع متوسطة:** 300$ – 800$\n🏢 **مشاريع كبيرة:** تُحدَّد بعد التشاور\n\nأرسل لنا تفاصيل مشروعك ونقدم لك عرضًا دقيقًا. هل تريد التواصل معنا؟`,
+    contact: `سيسعدنا التواصل معك! 🎯\n\nسأحتاج منك بعض المعلومات للتواصل:`,
+    automation: `الأتمتة مع AI تعمل كالتالي:\n\n1️⃣ **Trigger** — حدث يبدأ العملية (بريد إلكتروني، webhook، وقت محدد)\n2️⃣ **Processing** — معالجة البيانات وتحويلها\n3️⃣ **Action** — تنفيذ الإجراء المطلوب (إرسال، حفظ، إشعار)\n\nمثال: "عميل جديد يملأ نموذج → يُضاف تلقائيًا للـ CRM → يتلقى بريد ترحيب → تُرسل إشعار على Telegram"\n\nهل تريد مثالًا على workflow لعملك؟`,
+    default: `شكرًا على سؤالك! 🙏\n\nأنا VOX، أنا متخصص في الإجابة على استفسارات خدمات الأتمتة لدينا.\n\nيمكنني مساعدتك في:\n• معرفة خدماتنا\n• الأسعار والعروض\n• كيفية عمل الأتمتة\n• التواصل مع فريقنا\n\nما الذي يمكنني مساعدتك به بالتحديد؟`,
+    outOfScope: `أقدّر سؤالك، لكن هذا الموضوع خارج نطاق تخصصي. أنا VOX، مساعد متخصص في خدمات الأتمتة وAI.\n\nيمكنني مساعدتك في أي شيء يتعلق بخدماتنا. هل هناك شيء يتعلق بالأتمتة يمكنني مساعدتك به؟ 🤝`,
+  },
+  en: {
+    services: `Our services include:\n\n🔗 **API & Systems Integration** — connect your tools automatically\n⚙️ **Workflow Building** — design smart flows with AI\n📧 **Marketing Automation** — email, Telegram, WhatsApp\n📊 **Data Dashboards** — auto reports in Google Sheets / Airtable\n🤖 **Chatbot Building** — exactly like this one!\n\nWould you like details on a specific service?`,
+    pricing: `Pricing depends on the project scope and complexity.\n\n📦 **Small projects:** Starting from $150\n🏗️ **Medium projects:** $300 – $800\n🏢 **Large projects:** Determined after consultation\n\nShare your project details and we'll give you an accurate quote. Want to get in touch?`,
+    contact: `We'd love to hear from you! 🎯\n\nI'll need a few details to connect you with our team:`,
+    automation: `Automation with AI works like this:\n\n1️⃣ **Trigger** — an event starts the process (email, webhook, schedule)\n2️⃣ **Processing** — data is processed and transformed\n3️⃣ **Action** — the desired action is executed (send, save, notify)\n\nExample: "New client fills form → auto-added to CRM → receives welcome email → Telegram notification sent"\n\nWould you like a workflow example for your business?`,
+    default: `Thanks for your question! 🙏\n\nI'm VOX, specialized in answering questions about our automation services.\n\nI can help you with:\n• Our services overview\n• Pricing & offers\n• How automation works\n• Connecting with our team\n\nWhat specifically can I help you with?`,
+    outOfScope: `I appreciate your question, but that topic is outside my area of expertise. I'm VOX, a specialist assistant for automation and AI services.\n\nI can assist with anything related to our services. Is there something about automation I can help you with? 🤝`,
+  },
+  fr: {
+    services: `Nos services comprennent:\n\n🔗 **Intégration API & Systèmes** — connectez vos outils automatiquement\n⚙️ **Construction de Workflows** — concevez des flux intelligents avec AI\n📧 **Automatisation Marketing** — email, Telegram, WhatsApp\n📊 **Tableaux de Bord** — rapports auto dans Google Sheets / Airtable\n🤖 **Création de Chatbots** — exactement comme celui-ci!\n\nVoulez-vous des détails sur un service spécifique?`,
+    pricing: `Les tarifs dépendent de la taille et la complexité du projet.\n\n📦 **Petits projets:** À partir de 150$\n🏗️ **Projets moyens:** 300$ – 800$\n🏢 **Grands projets:** Définis après consultation\n\nPartagez les détails de votre projet pour un devis précis. Souhaitez-vous nous contacter?`,
+    contact: `Nous serions ravis de vous entendre! 🎯\n\nJ'ai besoin de quelques informations pour vous connecter à notre équipe:`,
+    automation: `L'automatisation intelligente fonctionne ainsi:\n\n1️⃣ **Déclencheur** — un événement démarre le processus (email, webhook, planification)\n2️⃣ **Traitement** — les données sont traitées et transformées\n3️⃣ **Action** — l'action souhaitée est exécutée (envoyer, sauvegarder, notifier)\n\nExemple: "Nouveau client remplit un formulaire → ajouté auto au CRM → reçoit un email de bienvenue → notification Telegram"\n\nVoulez-vous un exemple de workflow pour votre activité?`,
+    default: `Merci pour votre question! 🙏\n\nJe suis VOX, spécialisé dans les services d'automatisation.\n\nJe peux vous aider avec:\n• Nos services\n• Les tarifs\n• Le fonctionnement de l'automatisation\n• Contacter notre équipe\n\nQue puis-je faire pour vous spécifiquement?`,
+    outOfScope: `J'apprécie votre question, mais ce sujet dépasse mon domaine de spécialité. Je suis VOX, assistant spécialisé en automatisation AI.\n\nJe peux vous aider pour tout ce qui concerne nos services. Y a-t-il quelque chose sur l'automatisation avec lequel je peux vous aider? 🤝`,
+  }
+};
 
-// ─── VAPI CHAT + VOICE SYSTEM ───
-
-
-
-let currentLang = 'ar';
-let isRecording = false;
-
-// ─── FUNCTIONS ───
 // ─── FUNCTIONS ───
 function setLang(lang) {
   currentLang = lang;
@@ -916,64 +935,32 @@ function renderQuickReplies() {
   });
 }
 
-
-async function processUserInput(text) {
-
-  addUserMessage(text);
-
-  document.getElementById('quick-replies').innerHTML = '';
-
-  showTyping();
-
-  try {
-
-    await vapi.send({
-      type: 'add-message',
-      message: {
-        role: 'user',
-        content: text
-      }
-    });
-
-  } catch (err) {
-
-    console.error(err);
-
-    hideTyping();
-
-    addBotMessage('Connection error');
-
-  }
+function getAIResponse(input) {
+  const r = aiResponses[currentLang];
+  const lower = input.toLowerCase();
+  if (/خدم|service|servic|what do you|ماذا تقدم|تقدم|offer/i.test(lower)) return { text: r.services };
+  if (/سعر|كلف|تكلف|price|cost|tarif|combien|كم/i.test(lower)) return { text: r.pricing };
+  if (/تواصل|اتصل|contact|join|message|reach|كلم|joindre/i.test(lower)) return { text: r.contact, showLead: true };
+  if (/أتمت|automat|workflow|AI|كيف تعمل|how.+work|comment.+fonctionne/i.test(lower)) return { text: r.automation };
+  if (/شكر|thank|merci|hello|مرحب|سلام|bonjour|hi\b|hey\b/i.test(lower)) return { text: r.default };
+  return { text: r.outOfScope };
 }
 
-vapi.on('message', (message) => {
-
-  console.log(message);
-
-  if (message.type === 'transcript') {
-
-    document.getElementById('voice-transcript').textContent =
-      message.transcript;
-
-    document.getElementById('voice-transcript').classList.remove('empty');
-  }
-
-  if (
-    message.type === 'assistant-response' ||
-    message.type === 'function-call-result'
-  ) {
-
+function processUserInput(text) {
+  addUserMessage(text);
+  document.getElementById('quick-replies').innerHTML = '';
+  showTyping();
+  setTimeout(() => {
     hideTyping();
-
-    if (message.response) {
-      addBotMessage(message.response);
+    const resp = getAIResponse(text);
+    if (resp.showLead) {
+      addBotMessage(resp.text, renderLeadForm());
+      awaitingLead = true;
+    } else {
+      addBotMessage(resp.text);
     }
-
-    if (message.content) {
-      addBotMessage(message.content);
-    }
-  }
-});
+  }, 900 + Math.random() * 600);
+}
 
 function renderLeadForm() {
   return `<div class="lead-form" style="margin-top:0.8rem">
