@@ -360,12 +360,9 @@ h1 span{color:#a78bfa}
 
 </div>
 
-<!--
-  VAPI Web SDK — UMD build that exposes `Vapi` as a global class.
-  Source: https://github.com/balacodeio/Vapi-Web-UMD
-  This does NOT inject any UI button. Full control stays in your own HTML.
--->
-<script src="https://cdn.jsdelivr.net/gh/balacodeio/Vapi-Web-UMD@latest/dist/latest/vapi-web-bundle.min.js"></script>
+<!-- VAPI Web SDK — Version 2.5.0+ avec Daily.js compatible et chargement asynchrone -->
+<script async src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi-web.min.js"></script>
+
 <script>
 /* ══ CONFIG ══ */
 const VAPI_KEY = 'e7599e5e-a966-4c6b-83bc-f518f673de57';
@@ -377,6 +374,37 @@ let vapiInst = null;   // single Vapi instance, reused
 let callOn  = false;
 let sending = false;
 let history = [];      // chat message history for context
+let vapiLoaded = false; // Flag pour vérifier si Vapi est chargé
+
+/* ══ Attendre que Vapi se charge ══ */
+function waitForVapi() {
+  return new Promise((resolve) => {
+    if (typeof Vapi !== 'undefined') {
+      vapiLoaded = true;
+      resolve();
+      return;
+    }
+    
+    const checkInterval = setInterval(() => {
+      if (typeof Vapi !== 'undefined') {
+        vapiLoaded = true;
+        clearInterval(checkInterval);
+        resolve();
+      }
+    }, 100);
+    
+    // Timeout après 10 secondes
+    setTimeout(() => {
+      clearInterval(checkInterval);
+      resolve();
+    }, 10000);
+  });
+}
+
+// Initialiser Vapi dès que possible
+waitForVapi().then(() => {
+  console.log('✅ Vapi SDK chargé avec succès');
+});
 
 /* ══ TRANSLATIONS ══ */
 const T = {
@@ -682,7 +710,7 @@ function submitLead() {
 }
 
 /* ══ VOICE — VAPI Web SDK ══
-   Uses `new Vapi(apiKey)` from the UMD bundle loaded above.
+   Uses `new Vapi(apiKey)` from la version 2.5.0+
    Docs: https://github.com/VapiAI/client-sdk-web
    - NO UI is injected by this SDK.
    - vapi.start(assistantId) → starts the call.
@@ -692,7 +720,9 @@ function submitLead() {
 function getVapi() {
   if (vapiInst) return vapiInst;
 
-  if (typeof Vapi === 'undefined') throw new Error('Vapi SDK not loaded');
+  if (!vapiLoaded || typeof Vapi === 'undefined') {
+    throw new Error('Vapi SDK not loaded');
+  }
 
   vapiInst = new Vapi(VAPI_KEY);
 
@@ -744,6 +774,14 @@ async function toggleCall() {
     setText('t-vstat', T[lang].vstat);
     return;
   }
+  
+  // Vérifier que Vapi est bien chargé avant de démarrer
+  if (!vapiLoaded || typeof Vapi === 'undefined') {
+    setVTx(T[lang].errNoSDK, false);
+    setText('t-vstat', T[lang].vstat);
+    return;
+  }
+  
   // Start
   setVTx('...', true);
   setText('t-vstat', T[lang].connecting);
@@ -755,7 +793,7 @@ async function toggleCall() {
     callOn = false;
     setCallUI(false);
     setText('t-vstat', T[lang].vstat);
-    const noSDK = typeof Vapi === 'undefined';
+    const noSDK = !vapiLoaded || typeof Vapi === 'undefined';
     setVTx(noSDK ? T[lang].errNoSDK : T[lang].errStart, false);
   }
 }
