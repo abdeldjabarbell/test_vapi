@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOX AI — Automation Agency</title>
+<title>VOX AI — Smart AI Agents</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -113,7 +113,7 @@
     width: 62px;
     height: 62px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    background: #111827;
     border: none;
     cursor: pointer;
     z-index: 9000;
@@ -286,9 +286,10 @@
   }
   .chat-header-left { display: flex; align-items: center; gap: 0.8rem; }
   .vox-avatar {
+    overflow:hidden;
     width: 40px; height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    background: #111827;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Syne', sans-serif;
     font-weight: 800;
@@ -620,7 +621,7 @@
 <div class="site-hero">
   <div class="hero-tag"><span class="hero-dot"></span> <span id="hero-tag-text">وكالة أتمتة متقدمة</span></div>
   <h1 class="hero-h1" id="hero-h1">نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span></h1>
-  <p class="hero-sub" id="hero-sub">حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.</p>
+  <p class="hero-sub" id="hero-sub">حلول أتمتة ذكية، تكاملات API، وبناء workflows احترافية — نوفر لك الوقت لما يهم.</p>
 </div>
 
 <!-- ═══ FLOATING BUTTON ═══ -->
@@ -642,7 +643,7 @@
   <!-- MODE SELECT -->
   <div id="mode-select">
     <div class="vox-logo-big">VOX</div>
-    <p class="vox-tagline" id="mode-tagline">مساعدك الذكي  </p>
+    <p class="vox-tagline" id="mode-tagline">مساعدك الذكي لخدمات الأتمتة</p>
     <div class="mode-cards">
       <div class="mode-card" onclick="openChat()">
         <div class="mode-icon">
@@ -671,7 +672,10 @@
   <div id="chat-screen">
     <div class="chat-header">
       <div class="chat-header-left">
-        <div class="vox-avatar">VOX</div>
+        <div class="vox-avatar">
+  <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+       style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+</div>
         <div class="chat-header-info">
           <h3>VOX AI</h3>
           <div class="chat-status"><span class="status-dot"></span> <span id="chat-status-text">متصل</span></div>
@@ -690,11 +694,15 @@
       </button>
     </div>
   </div>
+
   <!-- VOICE SCREEN -->
   <div id="voice-screen">
     <div class="voice-header">
       <div class="chat-header-left">
-        <div class="vox-avatar">VOX</div>
+        <div class="vox-avatar">
+  <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+       style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+</div>
         <div>
           <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;" id="voice-title-text">وضع الصوت</h3>
           <div class="chat-status"><span class="status-dot"></span><span id="voice-status-text">جاهز للاستماع</span></div>
@@ -738,82 +746,63 @@ let awaitingLead = false;
 const copy = {
   ar: {
     popupText: '👋 مرحبًا، أنا <strong>VOX</strong>! هنا لمساعدتك. اضغط وابدأ محادثة معي',
-    heroTag: 'وكالة  متقدمة',
+    heroTag: 'وكالة أتمتة متقدمة',
     heroH1: 'نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span>',
-    heroSub: 'حلول  ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.',
-    modeTagline: 'مساعدك الذكي لخدمات ',
+    heroSub: 'حلول أتمتة ذكية، تكاملات API، وبناء workflows احترافية — نوفر لك الوقت لما يهم.',
+    modeTagline: 'مساعدك الذكي لخدمات الأتمتة',
     modeTextLabel: 'محادثة نصية', modeTextDesc: 'اكتب سؤالك وسأرد فورًا',
     modeVoiceLabel: 'محادثة صوتية', modeVoiceDesc: 'تحدث مع VOX صوتيًا',
     modeCancel: 'إلغاء', chatStatus: 'متصل', endChat: 'إنهاء المحادثة',
     voiceTitle: 'وضع الصوت', voiceStatus: 'جاهز للاستماع', voiceHint: 'اضغط على الدائرة للتحدث',
     inputPlaceholder: 'اكتب رسالتك...',
-    welcome: 'مرحبًا! أنا VOX، مساعدك الذكي لخدمات . كيف يمكنني مساعدتك اليوم؟',
-    quickReplies: ['ما هي خدماتكم؟', 'كم تكلف الخدمة؟', 'أريد التواصل', 'كيف تعمل ؟'],
+    welcome: 'مرحبًا! أنا VOX، مساعدك الذكي لخدمات الذكاء الاصطناعي. كيف يمكنني مساعدتك اليوم؟',
+    quickReplies: ['ما هي خدماتكم؟', 'كم تكلف الخدمة؟', 'أريد التواصل', 'كيف تعمل الأتمتة؟'],
     voiceListening: 'جارٍ الاستماع...',
     voiceProcessing: 'جارٍ المعالجة...',
   },
   en: {
     popupText: '👋 Hi, I\'m <strong>VOX</strong>! I\'m here to help. Click to start chatting.',
     heroTag: 'Advanced Automation Agency',
-    heroH1: 'Automate your business<br>with <span>AI power</span>',
-    heroSub: 'Smart automation, API integrations, and professional digital services — freeing your time for what matters.',
+    heroH1: 'Automate your business<br>with <span>AI</span> power',
+    heroSub: 'Smart automation, API integrations, and professional workflows — freeing your time for what matters.',
     modeTagline: 'Your AI assistant for automation services',
     modeTextLabel: 'Text Chat', modeTextDesc: 'Type your question, I\'ll respond instantly',
     modeVoiceLabel: 'Voice Chat', modeVoiceDesc: 'Talk with VOX by voice',
     modeCancel: 'Cancel', chatStatus: 'Online', endChat: 'End Chat',
     voiceTitle: 'Voice Mode', voiceStatus: 'Ready to listen', voiceHint: 'Tap the circle to speak',
     inputPlaceholder: 'Type your message...',
-    welcome: 'Hello! I\'m VOX, your smart AI assistant for automation services. How can I help you today?',
+    welcome: 'Hello! I\'m VOX, your smart AI assistant. How can I help you today?',
     quickReplies: ['What are your services?', 'How much does it cost?', 'I want to contact you', 'How does automation work?'],
     voiceListening: 'Listening...',
     voiceProcessing: 'Processing...',
   },
   fr: {
     popupText: '👋 Bonjour, je suis <strong>VOX</strong>! Je suis là pour vous aider. Cliquez pour commencer.',
-    heroTag: 'Agence d\'automatisation intelligente',
-    heroH1: 'Automatisez votre business<br>avec <span>l\'IA</span>',
-    heroSub: 'Automatisations intelligentes, intégrations API, et services numériques professionnels — nous libérons votre temps.',
+    heroTag: 'Agence d\'automatisation avancée',
+    heroH1: 'Automatisez votre business<br>avec <span>IA</span>',
+    heroSub: 'Automatisations intelligentes, intégrations API, et workflows professionnels — nous libérons votre temps.',
     modeTagline: 'Votre assistant IA pour l\'automatisation',
     modeTextLabel: 'Chat Texte', modeTextDesc: 'Posez votre question, je réponds aussitôt',
     modeVoiceLabel: 'Chat Vocal', modeVoiceDesc: 'Parlez à VOX par la voix',
     modeCancel: 'Annuler', chatStatus: 'En ligne', endChat: 'Terminer la conversation',
     voiceTitle: 'Mode Vocal', voiceStatus: 'Prêt à écouter', voiceHint: 'Appuyez sur le cercle pour parler',
     inputPlaceholder: 'Tapez votre message...',
-    welcome: 'Bonjour! Je suis VOX, votre assistant IA pour les services d\'automatisation. Comment puis-je vous aider aujourd\'hui?',
+    welcome: 'Bonjour! Je suis VOX, votre assistant IA de l\'agence AI. Comment puis-je vous aider aujourd\'hui?',
     quickReplies: ['Quels sont vos services?', 'Quel est le tarif?', 'Je veux vous contacter', 'Comment fonctionne l\'automatisation?'],
     voiceListening: 'En écoute...',
     voiceProcessing: 'Traitement...',
   }
 };
 
-// ─── AI RESPONSES ───
-const aiResponses = {
-  ar: {
-    services: `خدماتنا تشمل:\n\n🔗 **تكامل APIs والأنظمة** — ربط أدواتك ببعضها تلقائيًا\n⚙️ **بناء Workflows** — تصميم تدفقات عمل ذكية واحترافية\n📧 **أتمتة التسويق** — ايميل، Telegram، WhatsApp\n📊 **لوحات بيانات** — تقارير تلقائية في Google Sheets / Airtable\n🤖 **بناء Chatbots** — مثل هذا بالضبط!\n\nهل تريد تفاصيل عن خدمة معينة؟`,
-    pricing: `التسعير يعتمد على حجم المشروع وتعقيده.\n\n📦 **مشاريع صغيرة:** تبدأ من 150$\n🏗️ **مشاريع متوسطة:** 300$ – 800$\n🏢 **مشاريع كبيرة:** تُحدَّد بعد التشاور\n\nأرسل لنا تفاصيل مشروعك ونقدم لك عرضًا دقيقًا. هل تريد التواصل معنا؟`,
-    contact: `سيسعدنا التواصل معك! 🎯\n\nسأحتاج منك بعض المعلومات للتواصل:`,
-    automation: ` الذكية تعمل كالتالي:\n\n1️⃣ **Trigger** — حدث يبدأ العملية (بريد إلكتروني، webhook، وقت محدد)\n2️⃣ **Processing** — معالجة البيانات وتحويلها\n3️⃣ **Action** — تنفيذ الإجراء المطلوب (إرسال، حفظ، إشعار)\n\nمثال: "عميل جديد يملأ نموذج → يُضاف تلقائيًا للـ CRM → يتلقى بريد ترحيب → تُرسل إشعار على Telegram"\n\nهل تريد مثالًا على workflow لعملك؟`,
-    default: `شكرًا على سؤالك! 🙏\n\nأنا VOX، أنا متخصص في الإجابة على استفسارات خدمات  لدينا.\n\nيمكنني مساعدتك في:\n• معرفة خدماتنا\n• الأسعار والعروض\n• كيفية عمل \n• التواصل مع فريقنا\n\nما الذي يمكنني مساعدتك به بالتحديد؟`,
-    outOfScope: `أقدّر سؤالك، لكن هذا الموضوع خارج نطاق تخصصي. أنا VOX، مساعد متخصص في خدمات  الذكية.\n\nيمكنني مساعدتك في أي شيء يتعلق بخدماتنا. هل هناك شيء يتعلق ب يمكنني مساعدتك به؟ 🤝`,
-  },
-  en: {
-    services: `Our services include:\n\n🔗 **API & Systems Integration** — connect your tools automatically\n⚙️ **Workflow Building** — design smart, professional automation flows\n📧 **Marketing Automation** — email, Telegram, WhatsApp\n📊 **Data Dashboards** — auto reports in Google Sheets / Airtable\n🤖 **Chatbot Building** — exactly like this one!\n\nWould you like details on a specific service?`,
-    pricing: `Pricing depends on the project scope and complexity.\n\n📦 **Small projects:** Starting from $150\n🏗️ **Medium projects:** $300 – $800\n🏢 **Large projects:** Determined after consultation\n\nShare your project details and we'll give you an accurate quote. Want to get in touch?`,
-    contact: `We'd love to hear from you! 🎯\n\nI'll need a few details to connect you with our team:`,
-    automation: `Smart automation works like this:\n\n1️⃣ **Trigger** — an event starts the process (email, webhook, schedule)\n2️⃣ **Processing** — data is processed and transformed\n3️⃣ **Action** — the desired action is executed (send, save, notify)\n\nExample: "New client fills form → auto-added to CRM → receives welcome email → Telegram notification sent"\n\nWould you like a workflow example for your business?`,
-    default: `Thanks for your question! 🙏\n\nI'm VOX, specialized in answering questions about our automation services.\n\nI can help you with:\n• Our services overview\n• Pricing & offers\n• How automation works\n• Connecting with our team\n\nWhat specifically can I help you with?`,
-    outOfScope: `I appreciate your question, but that topic is outside my area of expertise. I'm VOX, a specialist assistant for smart automation services.\n\nI can assist with anything related to our services. Is there something about automation I can help you with? 🤝`,
-  },
-  fr: {
-    services: `Nos services comprennent:\n\n🔗 **Intégration API & Systèmes** — connectez vos outils automatiquement\n⚙️ **Construction de Workflows** — concevez des flux d'automatisation intelligents\n📧 **Automatisation Marketing** — email, Telegram, WhatsApp\n📊 **Tableaux de Bord** — rapports auto dans Google Sheets / Airtable\n🤖 **Création de Chatbots** — exactement comme celui-ci!\n\nVoulez-vous des détails sur un service spécifique?`,
-    pricing: `Les tarifs dépendent de la taille et la complexité du projet.\n\n📦 **Petits projets:** À partir de 150$\n🏗️ **Projets moyens:** 300$ – 800$\n🏢 **Grands projets:** Définis après consultation\n\nPartagez les détails de votre projet pour un devis précis. Souhaitez-vous nous contacter?`,
-    contact: `Nous serions ravis de vous entendre! 🎯\n\nJ'ai besoin de quelques informations pour vous connecter à notre équipe:`,
-    automation: `L'automatisation intelligente fonctionne ainsi:\n\n1️⃣ **Déclencheur** — un événement démarre le processus (email, webhook, planification)\n2️⃣ **Traitement** — les données sont traitées et transformées\n3️⃣ **Action** — l'action souhaitée est exécutée (envoyer, sauvegarder, notifier)\n\nExemple: "Nouveau client remplit un formulaire → ajouté auto au CRM → reçoit un email de bienvenue → notification Telegram"\n\nVoulez-vous un exemple de workflow pour votre activité?`,
-    default: `Merci pour votre question! 🙏\n\nJe suis VOX, spécialisé dans les services d'automatisation.\n\nJe peux vous aider avec:\n• Nos services\n• Les tarifs\n• Le fonctionnement de l'automatisation\n• Contacter notre équipe\n\nQue puis-je faire pour vous spécifiquement?`,
-    outOfScope: `J'apprécie votre question, mais ce sujet dépasse mon domaine de spécialité. Je suis VOX, assistant spécialisé en automatisation intelligente.\n\nJe peux vous aider pour tout ce qui concerne nos services. Y a-t-il quelque chose sur l'automatisation avec lequel je peux vous aider? 🤝`,
-  }
-};
 
+// ─── VAPI CHAT + VOICE SYSTEM ───
+
+
+
+let currentLang = 'ar';
+let isRecording = false;
+
+// ─── FUNCTIONS ───
 // ─── FUNCTIONS ───
 function setLang(lang) {
   currentLang = lang;
@@ -867,15 +856,12 @@ function openChat() {
 function openVoice() {
   document.getElementById('mode-select').style.display = 'none';
   document.getElementById('voice-screen').style.display = 'flex';
-  setVoiceTranscript('...', true);
-  setVoiceStatus(copy[currentLang].voiceStatus);
-  // Pre-load VAPI SDK in the background
-  loadVapiSDK().catch(() => {});
+  document.getElementById('voice-transcript').textContent = '...';
+  document.getElementById('voice-transcript').classList.add('empty');
 }
 function endChat() {
   isRecording = false;
   if (recognition) try { recognition.stop(); } catch(e) {}
-  stopVapiCall();
   closeOverlay();
   setTimeout(() => {
     showModeSelect();
@@ -930,32 +916,64 @@ function renderQuickReplies() {
   });
 }
 
-function getAIResponse(input) {
-  const r = aiResponses[currentLang];
-  const lower = input.toLowerCase();
-  if (/خدم|service|servic|what do you|ماذا تقدم|تقدم|offer/i.test(lower)) return { text: r.services };
-  if (/سعر|كلف|تكلف|price|cost|tarif|combien|كم/i.test(lower)) return { text: r.pricing };
-  if (/تواصل|اتصل|contact|join|message|reach|كلم|joindre/i.test(lower)) return { text: r.contact, showLead: true };
-  if (/أتمت|automat|workflow|كيف تعمل|how.+work|comment.+fonctionne/i.test(lower)) return { text: r.automation };
-  if (/شكر|thank|merci|hello|مرحب|سلام|bonjour|hi\b|hey\b/i.test(lower)) return { text: r.default };
-  return { text: r.outOfScope };
+
+async function processUserInput(text) {
+
+  addUserMessage(text);
+
+  document.getElementById('quick-replies').innerHTML = '';
+
+  showTyping();
+
+  try {
+
+    await vapi.send({
+      type: 'add-message',
+      message: {
+        role: 'user',
+        content: text
+      }
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    hideTyping();
+
+    addBotMessage('Connection error');
+
+  }
 }
 
-function processUserInput(text) {
-  addUserMessage(text);
-  document.getElementById('quick-replies').innerHTML = '';
-  showTyping();
-  setTimeout(() => {
+vapi.on('message', (message) => {
+
+  console.log(message);
+
+  if (message.type === 'transcript') {
+
+    document.getElementById('voice-transcript').textContent =
+      message.transcript;
+
+    document.getElementById('voice-transcript').classList.remove('empty');
+  }
+
+  if (
+    message.type === 'assistant-response' ||
+    message.type === 'function-call-result'
+  ) {
+
     hideTyping();
-    const resp = getAIResponse(text);
-    if (resp.showLead) {
-      addBotMessage(resp.text, renderLeadForm());
-      awaitingLead = true;
-    } else {
-      addBotMessage(resp.text);
+
+    if (message.response) {
+      addBotMessage(message.response);
     }
-  }, 900 + Math.random() * 600);
-}
+
+    if (message.content) {
+      addBotMessage(message.content);
+    }
+  }
+});
 
 function renderLeadForm() {
   return `<div class="lead-form" style="margin-top:0.8rem">
@@ -978,7 +996,7 @@ function submitLead() {
     return;
   }
   const payload = { name, email, message: msg, language: currentLang, timestamp: new Date().toISOString() };
-  console.log('📤 Lead payload:', payload);
+  console.log('📤 AI webhook payload:', payload);
   // fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
   const successMsg = { ar: `✅ شكرًا ${name}! تم استلام طلبك وسنتواصل معك على ${email} في أقرب وقت. 🚀`, en: `✅ Thank you ${name}! We received your request and will reach out to ${email} very soon. 🚀`, fr: `✅ Merci ${name}! Votre demande a été reçue, nous vous contacterons à ${email} très bientôt. 🚀` };
   addBotMessage(successMsg[currentLang]);
@@ -995,173 +1013,77 @@ function sendMessage() {
 function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 function autoResize(el) { el.style.height = ''; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
 
+
 // ─── VAPI VOICE ───
-const VAPI_ASSISTANT_ID = '31391dfd-785f-43e1-aaf3-feefabe16743';
-let vapiCallActive = false;
-let vapiReady = false;
+const vapi = new Vapi('e7599e5e-a966-4c6b-83bc-f518f673de57');
+const assistantId = '31391dfd-785f-43e1-aaf3-feefabe16743';
 
-// Load VAPI HTML-Script-Tag SDK
-function loadVapiSDK() {
-  return new Promise((resolve, reject) => {
-    if (window.vapiSDK) { vapiReady = true; resolve(); return; }
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
-    script.defer = true;
-    script.async = true;
-    script.onload = () => {
-      // Wait a tick for vapiSDK to be available
-      setTimeout(() => { vapiReady = true; resolve(); }, 300);
-    };
-    script.onerror = () => reject(new Error('Failed to load voice SDK'));
-    document.head.appendChild(script);
-  });
+async function startVapiVoice() {
+  try {
+    await vapi.start(assistantId);
+
+    document.getElementById('voice-status-text').textContent = 'Connected';
+
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-function setVoiceStatus(text) {
-  const el = document.getElementById('voice-status-text');
-  if (el) el.textContent = text;
-}
-function setVoiceTranscript(text, empty = false) {
-  const el = document.getElementById('voice-transcript');
-  if (!el) return;
-  el.textContent = text;
-  el.classList.toggle('empty', empty);
-}
-function setRecordingUI(active) {
-  document.getElementById('voice-btn').classList.toggle('recording', active);
-  document.getElementById('wave-bars').classList.toggle('active', active);
+function stopVapiVoice() {
+  vapi.stop();
+  document.getElementById('voice-status-text').textContent = 'Disconnected';
 }
 
-async function toggleRecording() {
-  if (vapiCallActive) {
-    stopVapiCall();
+function toggleRecording() {
+
+  if (!isRecording) {
+
+    isRecording = true;
+
+    document.getElementById('voice-btn').classList.add('recording');
+    document.getElementById('wave-bars').classList.add('active');
+
+    startVapiVoice();
+
   } else {
-    await startVapiCall();
+
+    isRecording = false;
+
+    document.getElementById('voice-btn').classList.remove('recording');
+    document.getElementById('wave-bars').classList.remove('active');
+
+    stopVapiVoice();
   }
 }
 
-async function startVapiCall() {
-  setVoiceTranscript('...', true);
-  setVoiceStatus(currentLang==='ar' ? 'جارٍ التحميل...' : currentLang==='fr' ? 'Chargement...' : 'Loading...');
+vapi.on('call-start', () => {
+  console.log('Call started');
+});
 
-  try {
-    await loadVapiSDK();
-  } catch(e) {
-    setVoiceTranscript(
-      currentLang==='ar' ? 'فشل تحميل خدمة الصوت. تحقق من اتصالك.' :
-      currentLang==='fr' ? 'Échec du chargement du service vocal.' :
-      'Failed to load voice service. Check your connection.',
-      false
-    );
-    setVoiceStatus(copy[currentLang].voiceStatus);
-    return;
+vapi.on('call-end', () => {
+
+  console.log('Call ended');
+
+  isRecording = false;
+
+  document.getElementById('voice-btn').classList.remove('recording');
+  document.getElementById('wave-bars').classList.remove('active');
+
+});
+
+vapi.on('message', (message) => {
+
+  console.log(message);
+
+  if (message.type === 'transcript') {
+
+    document.getElementById('voice-transcript').textContent =
+      message.transcript;
+
+    document.getElementById('voice-transcript').classList.remove('empty');
   }
+});
 
-  try {
-    if (!window.vapiSDK) throw new Error('vapiSDK not available');
-
-    // Run the VAPI assistant
-    const vapi = window.vapiSDK.run({
-      apiKey: 'e7599e5e-a966-4c6b-83bc-f518f673de57',
-      assistant: '31391dfd-785f-43e1-aaf3-feefabe16743',
-      //config: {
-      // position: 'bottom-right',
-      // theme: { primary: '#7c3aed', secondary: '#ffffff' }
-      //}
-    }); 
-
-    vapiCallActive = true;
-    setRecordingUI(true);
-    setVoiceStatus(copy[currentLang].voiceListening);
-    setVoiceTranscript(
-      currentLang==='ar' ? 'المساعد الصوتي نشط. يمكنك التحدث الآن.' :
-      currentLang==='fr' ? 'Assistant vocal actif. Vous pouvez parler.' :
-      'Voice assistant active. You can speak now.',
-      false
-    );
-
-    // Listen to vapi events if supported
-    if (vapi && typeof vapi.on === 'function') {
-      vapi.on('call-start', () => {
-        vapiCallActive = true;
-        setRecordingUI(true);
-        setVoiceStatus(copy[currentLang].voiceListening);
-      });
-
-      vapi.on('speech-start', () => {
-        setRecordingUI(true);
-        setVoiceStatus(copy[currentLang].voiceListening);
-      });
-
-      vapi.on('speech-end', () => {
-        setVoiceStatus(copy[currentLang].voiceProcessing);
-      });
-
-      vapi.on('message', (msg) => {
-        if (msg.type === 'transcript') {
-          const role = msg.role;
-          const text = msg.transcript || '';
-          if (text) {
-            const prefix = role === 'user'
-              ? (currentLang==='ar' ? 'أنت: ' : currentLang==='fr' ? 'Vous: ' : 'You: ')
-              : 'VOX: ';
-            setVoiceTranscript(prefix + text, false);
-            if (role === 'assistant') setVoiceStatus(copy[currentLang].voiceStatus);
-          }
-        }
-      });
-
-      vapi.on('call-end', () => {
-        vapiCallActive = false;
-        setRecordingUI(false);
-        setVoiceStatus(copy[currentLang].voiceStatus);
-        setVoiceTranscript(
-          currentLang==='ar' ? 'انتهت المحادثة. اضغط للمحادثة مجددًا.' :
-          currentLang==='fr' ? 'Appel terminé. Appuyez pour rappeler.' :
-          'Call ended. Press to call again.',
-          false
-        );
-      });
-
-      vapi.on('error', (err) => {
-        console.error('Voice error:', err);
-        vapiCallActive = false;
-        setRecordingUI(false);
-        setVoiceStatus(copy[currentLang].voiceStatus);
-        setVoiceTranscript(
-          currentLang==='ar' ? '⚠️ حدث خطأ. حاول مرة أخرى.' :
-          currentLang==='fr' ? '⚠️ Erreur. Réessayez.' :
-          '⚠️ Error. Please try again.',
-          false
-        );
-      });
-    }
-
-  } catch(e) {
-    console.error('Voice start error:', e);
-    vapiCallActive = false;
-    setRecordingUI(false);
-    setVoiceTranscript(
-      currentLang==='ar' ? '⚠️ تعذّر بدء الاتصال. حاول مرة أخرى.' :
-      currentLang==='fr' ? '⚠️ Impossible de démarrer. Réessayez.' :
-      '⚠️ Could not start. Please try again.',
-      false
-    );
-    setVoiceStatus(copy[currentLang].voiceStatus);
-  }
-}
-
-function stopVapiCall() {
-  vapiCallActive = false;
-  setRecordingUI(false);
-  setVoiceStatus(copy[currentLang].voiceStatus);
-  setVoiceTranscript(
-    currentLang==='ar' ? 'تم إيقاف المحادثة.' :
-    currentLang==='fr' ? 'Appel arrêté.' :
-    'Call stopped.',
-    false
-  );
-}
 
 // ─── POPUP TIMING ───
 setTimeout(() => {
@@ -1169,5 +1091,6 @@ setTimeout(() => {
   if (p) { p.classList.remove('hidden'); setTimeout(() => p.classList.add('hidden'), 6000); }
 }, 2000);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/index.js"></script>
 </body>
 </html>
