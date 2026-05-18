@@ -251,8 +251,12 @@ h1 span{color:#a78bfa}
     </div>
   </div>
 
-<script src="./vendor/vapi-web.min.js"></script>  
-<script>
+<script type="module">
+  import Vapi from "https://unpkg.com/@vapi-ai/web@2.2.7?module";
+  window.Vapi = Vapi;
+</script>
+  
+  <script>
      /* ===========================
       CONFIG (CHANGE THIS ONLY)
       =========================== */
