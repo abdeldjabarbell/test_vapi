@@ -1,563 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOX AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --p: #7c3aed;
-  --p2: #5b21b6;
-  --bg: #0c0a18;
-  --surface: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.1);
-  --text: #f1f0f5;
-  --muted: rgba(241,240,245,0.5);
-  --green: #4ade80;
-  --red: #ef4444;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VOX AI</title>
+  <style>
+    :root{
+      --bg:#0c0a18; --card:rgba(255,255,255,.06); --border:rgba(255,255,255,.12);
+      --txt:#f1f0f5; --muted:rgba(241,240,245,.55);
+      --p:#7c3aed; --p2:#5b21b6; --ok:#4ade80; --err:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--txt);min-height:100vh}
+    header{position:sticky;top:0;z-index:10;background:rgba(12,10,24,.8);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-weight:800;letter-spacing:.5px}
+    .langs{display:flex;gap:8px}
+    .langs button{border:1px solid var(--border);background:transparent;color:var(--muted);padding:6px 10px;border-radius:999px;cursor:pointer}
+    .langs button.on{border-color:var(--p);color:#c4b5fd;background:rgba(124,58,237,.12)}
+    main{max-width:900px;margin:0 auto;padding:48px 18px;text-align:center}
+    h1{margin:0 0 10px;font-size:clamp(28px,4vw,46px);line-height:1.1}
+    p{margin:0 auto;max-width:560px;color:var(--muted);line-height:1.7}
 
-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:1.2rem 2.5rem;background:rgba(12,10,24,0.8);
-  border-bottom:1px solid var(--border);backdrop-filter:blur(12px);
-  position:sticky;top:0;z-index:10;
-}
-.logo{
-  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;
-  background:linear-gradient(135deg,#a78bfa,var(--p));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.langs{display:flex;gap:.4rem}
-.lang-btn{
-  background:none;border:1px solid var(--border);color:var(--muted);
-  padding:.3rem .8rem;border-radius:99px;font-size:.75rem;cursor:pointer;
-  font-family:'DM Sans',sans-serif;transition:.2s;
-}
-.lang-btn.on,.lang-btn:hover{border-color:var(--p);color:#a78bfa;background:rgba(124,58,237,.12)}
+    .fab{position:fixed;left:18px;bottom:18px;width:62px;height:62px;border-radius:50%;
+      background:linear-gradient(135deg,var(--p),var(--p2));border:0;cursor:pointer;color:white;font-size:20px;
+      box-shadow:0 10px 28px rgba(124,58,237,.45)}
+    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:16px;
+      background:linear-gradient(155deg,rgba(76,29,149,.85),rgba(9,9,11,.97) 58%);backdrop-filter:blur(18px);z-index:999}
+    .overlay.open{display:flex}
 
-.hero{max-width:860px;margin:8rem auto 0;text-align:center;padding:0 1.5rem}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:.45rem;
-  border:1px solid rgba(167,139,250,.25);background:rgba(124,58,237,.08);
-  border-radius:99px;padding:.3rem .9rem;font-size:.78rem;color:#a78bfa;margin-bottom:1.8rem;
-}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--p);animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-h1{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:800;line-height:1.06;letter-spacing:-.03em;color:#fff;margin-bottom:1.2rem}
-h1 span{color:#a78bfa}
-.sub{font-size:1.05rem;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto}
-
-#fab{
-  position:fixed;bottom:2rem;left:2rem;width:60px;height:60px;border-radius:50%;
-  background:linear-gradient(135deg,var(--p),var(--p2));border:none;cursor:pointer;
-  z-index:900;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 28px rgba(124,58,237,.45);animation:fab-glow 3s ease-in-out infinite;transition:transform .2s;
-}
-#fab:hover{transform:scale(1.08)}
-@keyframes fab-glow{0%,100%{box-shadow:0 8px 28px rgba(124,58,237,.45)}50%{box-shadow:0 8px 36px rgba(124,58,237,.7),0 0 0 10px rgba(124,58,237,.08)}}
-#fab svg{width:26px;height:26px}
-
-#bubble{
-  position:fixed;bottom:7rem;left:1.5rem;background:rgba(25,18,50,.97);
-  border:1px solid var(--border);border-radius:14px;padding:.9rem 1.1rem;max-width:230px;
-  z-index:899;backdrop-filter:blur(16px);font-size:.85rem;line-height:1.5;
-  animation:pop-in .4s cubic-bezier(.34,1.56,.64,1);
-}
-#bubble::after{
-  content:'';position:absolute;bottom:-7px;left:24px;width:14px;height:14px;
-  background:rgba(25,18,50,.97);border-right:1px solid var(--border);border-bottom:1px solid var(--border);
-  transform:rotate(45deg);border-radius:0 0 3px 0;
-}
-#bubble strong{color:#a78bfa}
-#bubble-x{position:absolute;top:5px;right:7px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:.95rem}
-#bubble.hide{display:none}
-@keyframes pop-in{from{opacity:0;transform:translateY(10px) scale(.93)}to{opacity:1;transform:none}}
-
-#overlay{
-  position:fixed;inset:0;z-index:950;
-  background:linear-gradient(155deg,rgba(76,29,149,.82),rgba(9,9,11,.97) 58%);
-  backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .3s;
-}
-#overlay.open{opacity:1;pointer-events:all}
-
-#mode-screen{text-align:center;padding:2rem}
-.big-logo{
-  font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;
-  background:linear-gradient(135deg,#c4b5fd,var(--p));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:-.04em;margin-bottom:.3rem;
-}
-.tagline{color:var(--muted);font-size:.9rem;margin-bottom:2.5rem}
-.cards{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-.card{
-  background:var(--surface);border:1px solid var(--border);border-radius:18px;
-  padding:1.8rem 1.6rem;width:165px;cursor:pointer;transition:all .22s;
-  display:flex;flex-direction:column;align-items:center;gap:.9rem;
-}
-.card:hover{border-color:var(--p);background:rgba(124,58,237,.14);transform:translateY(-4px)}
-.card-icon{
-  width:52px;height:52px;border-radius:50%;background:rgba(124,58,237,.18);
-  border:1px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;
-}
-.card-icon svg{width:24px;height:24px;stroke:#a78bfa;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.card-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem}
-.card-desc{font-size:.75rem;color:var(--muted);line-height:1.4;text-align:center}
-.btn-cancel{
-  background:none;border:1px solid var(--border);color:var(--muted);
-  padding:.55rem 1.8rem;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;transition:.2s;
-}
-.btn-cancel:hover{border-color:rgba(255,255,255,.28);color:var(--text)}
-
-/* Voice screen */
-#voice-screen{
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  width:min(460px,95vw);height:min(560px,88vh);
-  background:rgba(14,10,28,.75);border:1px solid var(--border);border-radius:24px;
-  overflow:hidden;backdrop-filter:blur(22px);position:relative;gap:1.8rem;
-}
-.voice-top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid var(--border)}
-.voice-top-left{display:flex;align-items:center;gap:.75rem}
-.voice-brand{font-family:'Syne',sans-serif;font-weight:800;color:#fff}
-.voice-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:#fff}
-.voice-status{display:flex;align-items:center;gap:.35rem;font-size:.7rem;color:var(--green)}
-.sdot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
-
-.voice-body{display:flex;flex-direction:column;align-items:center;gap:1.4rem;margin-top:2.5rem}
-.rings{position:relative;width:190px;height:190px;display:flex;align-items:center;justify-content:center}
-.ring{position:absolute;border-radius:50%;border:1.5px solid rgba(124,58,237,.3);animation:ring-pulse 3s ease-in-out infinite}
-.ring:nth-child(1){width:190px;height:190px;animation-delay:0s}
-.ring:nth-child(2){width:148px;height:148px;animation-delay:.5s}
-.ring:nth-child(3){width:110px;height:110px;animation-delay:1s}
-@keyframes ring-pulse{0%,100%{opacity:.18;transform:scale(1)}50%{opacity:.55;transform:scale(1.05)}}
-
-#vbtn{
-  width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));
-  border:3px solid rgba(167,139,250,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;
-  position:relative;z-index:2;transition:.22s;box-shadow:0 0 36px rgba(124,58,237,.38);
-}
-#vbtn:hover{transform:scale(1.07);box-shadow:0 0 52px rgba(124,58,237,.6)}
-#vbtn.active{background:linear-gradient(135deg,#dc2626,#991b1b);border-color:rgba(248,113,113,.4);animation:rec 1.5s infinite}
-@keyframes rec{0%,100%{box-shadow:0 0 28px rgba(220,38,38,.5)}50%{box-shadow:0 0 56px rgba(220,38,38,.7)}}
-#vbtn svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-.wave{display:flex;align-items:center;gap:3px;height:28px;opacity:0;transition:.3s}
-.wave.on{opacity:1}
-.bar{width:3px;border-radius:3px;background:var(--p);animation:wa .7s ease-in-out infinite alternate}
-.bar:nth-child(1){height:7px;animation-delay:0s}.bar:nth-child(2){height:18px;animation-delay:.1s}
-.bar:nth-child(3){height:26px;animation-delay:.05s}.bar:nth-child(4){height:14px;animation-delay:.15s}
-.bar:nth-child(5){height:22px;animation-delay:.08s}.bar:nth-child(6){height:9px;animation-delay:.12s}
-.bar:nth-child(7){height:20px;animation-delay:.04s}
-@keyframes wa{from{transform:scaleY(1)}to{transform:scaleY(.28)}}
-
-.v-hint{color:var(--muted);font-size:.83rem;text-align:center}
-.vtx{
-  max-width:320px;text-align:center;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);border-radius:14px;
-  padding:.9rem 1.1rem;font-size:.875rem;line-height:1.5;min-height:54px;
-}
-.vtx.dim{color:var(--muted)}
-</style>
+    .panel{width:min(520px,96vw);border:1px solid var(--border);background:rgba(14,10,28,.78);
+      border-radius:22px;overflow:hidden}
+    .top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+    .status{display:flex;align-items:center;gap:8px;color:var(--ok);font-size:12px}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+    .btn{border:1px solid var(--border);background:transparent;color:var(--txt);padding:8px 12px;border-radius:999px;cursor:pointer}
+    .body{padding:22px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:14px}
+    .circle{width:86px;height:86px;border-radius:50%;border:0;cursor:pointer;color:#fff;
+      background:linear-gradient(135deg,var(--p),var(--p2));
+      box-shadow:0 0 44px rgba(124,58,237,.40);transition:.18s transform}
+    .circle:active{transform:scale(.98)}
+    .circle.on{background:linear-gradient(135deg,#dc2626,#991b1b);box-shadow:0 0 48px rgba(220,38,38,.55)}
+    .hint{color:var(--muted);font-size:13px}
+    .tx{width:100%;max-width:420px;min-height:58px;padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);text-align:start;line-height:1.5}
+    .tx.dim{color:var(--muted)}
+  </style>
 </head>
-<body>
 
-<nav>
+<body>
+<header>
   <div class="logo">VOX</div>
   <div class="langs">
-    <button class="lang-btn on" data-lang="ar">عربي</button>
-    <button class="lang-btn" data-lang="en">EN</button>
-    <button class="lang-btn" data-lang="fr">FR</button>
+    <button data-lang="ar" class="on">عربي</button>
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
   </div>
-</nav>
+</header>
 
-<div class="hero">
-  <div class="hero-tag"><span class="dot"></span><span id="t-tag">وكالة أتمتة متقدمة</span></div>
-  <h1 id="t-h1">نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span></h1>
-  <p class="sub" id="t-sub">حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.</p>
-</div>
+<main>
+  <h1 id="t-h1">نؤتمت أعمالك بقوة الذكاء الاصطناعي</h1>
+  <p id="t-sub">اضغط زر VOX في الأسفل وابدأ محادثة صوتية طبيعية.</p>
+</main>
 
-<button id="fab" aria-label="VOX">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-  </svg>
-</button>
+<button class="fab" id="fab" aria-label="Open VOX">VOX</button>
 
-<div id="bubble">
-  <button id="bubble-x" aria-label="close">✕</button>
-  <span id="t-bubble">👋 مرحبًا! أنا <strong>VOX</strong> — اضغط لنبدأ</span>
-</div>
-
-<div id="overlay">
-  <div id="mode-screen">
-    <div class="big-logo">VOX</div>
-    <p class="tagline" id="t-tagline">مساعدك الذكي لخدمات الأتمتة</p>
-
-    <div class="cards">
-      <div class="card" id="open-voice">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-          </svg>
-        </div>
-        <div class="card-lbl" id="t-vl">محادثة صوتية</div>
-        <div class="card-desc" id="t-vd">تحدث مع VOX مباشرة</div>
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="panel" role="dialog" aria-modal="true">
+    <div class="top">
+      <div>
+        <div style="font-weight:800">VOX AI</div>
+        <div class="status"><span class="dot"></span><span id="t-status">جاهز</span></div>
       </div>
+      <button class="btn" id="closeBtn">إغلاق</button>
     </div>
 
-    <button class="btn-cancel" id="btn-cancel">إلغاء</button>
-  </div>
-
-  <div id="voice-screen">
-    <div class="voice-top">
-      <div class="voice-top-left">
-        <div class="voice-brand">VOX</div>
-        <div class="voice-meta">
-          <div class="voice-title">VOX AI</div>
-          <div class="voice-status">
-            <span class="sdot"></span>
-            <span id="t-vstat">جاهز للاستماع</span>
-          </div>
-        </div>
-      </div>
-      <button class="btn-cancel" id="btn-end">إنهاء</button>
-    </div>
-
-    <div class="voice-body">
-      <div class="rings">
-        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
-        <button id="vbtn" aria-label="toggle call">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="wave" id="wave">
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-      </div>
-
-      <p class="v-hint" id="t-vhint">اضغط على الدائرة للتحدث</p>
-      <div class="vtx dim" id="vtx">...</div>
+    <div class="body">
+      <button class="circle" id="toggleBtn">🎙️</button>
+      <div class="hint" id="t-hint">اضغط لبدء/إيقاف المحادثة</div>
+      <div class="tx dim" id="tx">...</div>
     </div>
   </div>
 </div>
 
-<script type="module">
-  import Vapi from "https://esm.sh/@vapi-ai/web@2.2.7";
-  window.VapiCtor = Vapi;
-</script>
+<!-- Vapi Web SDK (script tag version: most compatible) -->
+<script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.2.7/dist/index.umd.js"></script>
 
 <script>
-/* ===========================
-   CONFIG (CHANGE THIS ONLY)
-   =========================== */
-const VAPI_PUBLIC_KEY = "e7599e5e-a966-4c6b-83bc-f518f673de57"; // public key
-const ASST_ID = "31391dfd-785f-43e1-aaf3-feefabe16743";        // assistant id
+  // ====== CONFIG ======
+  const VAPI_PUBLIC_KEY = "e7599e5e-a966-4c6b-83bc-f518f673de57";
+  const ASSISTANT_ID = "31391dfd-785f-43e1-aaf3-feefabe16743";
 
-let lang = "ar";
-let vapi = null;
-let callOn = false;
-
-const $id = (id) => document.getElementById(id);
-const setText = (id, v) => { const e = $id(id); if (e) e.textContent = v; };
-const setHTML = (id, v) => { const e = $id(id); if (e) e.innerHTML = v; };
-
-const T = {
-  ar:{ tag:"وكالة أتمتة متقدمة", h1:"نؤتمت أعمالك<br>بقوة <span>الذكاء الاصطناعي</span>", sub:"حلول أتمتة ذكية، تكاملات API، وخدمات رقمية احترافية — نوفر لك الوقت لما يهم.",
-    bubble:"👋 مرحبًا! أنا <strong>VOX</strong> — اضغط لنبدأ", tagline:"مساعدك الذكي لخدمات الأتمتة", vl:"محادثة صوتية", vd:"تحدث مع VOX مباشرة",
-    cancel:"إلغاء", end:"إنهاء", vstat:"جاهز للاستماع", vhint:"اضغط على الدائرة للتحدث",
-    listening:"جارٍ الاستماع...", processing:"جارٍ المعالجة...", connecting:"جارٍ الاتصال...",
-    callActive:"الاتصال نشط — تحدث الآن", callEnded:"انتهى الاتصال. اضغط للبدء مجدداً.", callStopped:"تم إيقاف الاتصال.",
-    errNoSDK:"❌ Vapi SDK not ready yet. Try again in 1s.", errStart:"❌ تعذّر بدء الاتصال. تأكد من توفر الميكروفون.", errCall:"⚠️ خطأ في الاتصال. حاول مرة أخرى." },
-  en:{ tag:"Advanced Automation Agency", h1:"Automate your business<br>with <span>AI power</span>", sub:"Smart automation, API integrations, and professional digital services — freeing your time for what matters.",
-    bubble:"👋 Hi! I'm <strong>VOX</strong> — click to start", tagline:"Your AI assistant for automation services", vl:"Voice Chat", vd:"Talk to VOX directly",
-    cancel:"Cancel", end:"End", vstat:"Ready to listen", vhint:"Tap the circle to speak",
-    listening:"Listening...", processing:"Processing...", connecting:"Connecting...",
-    callActive:"Call active — speak now", callEnded:"Call ended. Press to start again.", callStopped:"Call stopped.",
-    errNoSDK:"❌ Vapi SDK not ready yet. Try again in 1s.", errStart:"❌ Failed to start call. Check microphone access.", errCall:"⚠️ Call error. Try again." },
-  fr:{ tag:"Agence d'automatisation intelligente", h1:"Automatisez votre business<br>avec <span>l'IA</span>", sub:"Automatisations intelligentes, intégrations API, services numériques — nous libérons votre temps.",
-    bubble:"👋 Bonjour! Je suis <strong>VOX</strong> — cliquez pour commencer", tagline:"Votre assistant IA pour l'automatisation", vl:"Chat Vocal", vd:"Parlez à VOX directement",
-    cancel:"Annuler", end:"Terminer", vstat:"Prêt à écouter", vhint:"Appuyez sur le cercle pour parler",
-    listening:"En écoute...", processing:"Traitement...", connecting:"Connexion...",
-    callActive:"Appel actif — parlez maintenant", callEnded:"Appel terminé. Appuyez pour recommencer.", callStopped:"Appel arrêté.",
-    errNoSDK:"❌ SDK Vapi pas prêt. Réessaie dans 1s.", errStart:"❌ Impossible de démarrer. Vérifiez le micro.", errCall:"⚠️ Erreur d'appel. Réessayez." }
-};
-
-function setVTx(txt, dim) {
-  const el = $id("vtx");
-  if (!el) return;
-  el.textContent = txt;
-  el.classList.toggle("dim", !!dim);
-}
-function setCallUI(on) {
-  $id("vbtn")?.classList.toggle("active", !!on);
-  $id("wave")?.classList.toggle("on", !!on);
-}
-
-/* Overlay */
-function closeBubble(){ $id("bubble")?.classList.add("hide"); }
-
-function showMode() {
-  const mode = $id("mode-screen");
-  const voice = $id("voice-screen");
-  if (mode) mode.style.display = "block";
-  if (voice) voice.style.display = "none";
-}
-function openOverlay() {
-  closeBubble();
-  $id("overlay")?.classList.add("open");
-  showMode();
-}
-function openVoice() {
-  const mode = $id("mode-screen");
-  const voice = $id("voice-screen");
-  if (mode) mode.style.display = "none";
-  if (voice) voice.style.display = "flex";
-  setVTx("...", true);
-  setText("t-vstat", T[lang].vstat);
-}
-function closeAll() {
-  if (callOn && vapi) { try { vapi.stop(); } catch(e){} }
-  callOn = false;
-  setCallUI(false);
-  $id("overlay")?.classList.remove("open");
-  setTimeout(() => {
-    showMode();
-    setVTx("...", true);
-    setText("t-vstat", T[lang].vstat);
-  }, 300);
-}
-
-/* Language */
-function setLang(l) {
-  lang = l;
-  document.documentElement.lang = l;
-  document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
-
-  document.querySelectorAll(".lang-btn").forEach((b) => {
-    b.classList.toggle("on", b.dataset.lang === l);
-  });
-
-  const t = T[l];
-  setText("t-tag", t.tag);
-  setHTML("t-h1", t.h1);
-  setText("t-sub", t.sub);
-  setHTML("t-bubble", t.bubble);
-  setText("t-tagline", t.tagline);
-  setText("t-vl", t.vl);
-  setText("t-vd", t.vd);
-  setText("btn-cancel", t.cancel);
-  setText("btn-end", t.end);
-  setText("t-vstat", t.vstat);
-  setText("t-vhint", t.vhint);
-}
-
-/* Vapi init */
-function initVapiOrThrow() {
-  if (vapi) return vapi;
-  if (!window.VapiCtor) throw new Error(T[lang].errNoSDK);
-
-  vapi = new window.VapiCtor(VAPI_PUBLIC_KEY);
-
-  vapi.on("call-start", () => {
-    stopRingingTone();
-    callOn = true;
-    setCallUI(true);
-    setText("t-vstat", T[lang].listening);
-    setVTx(T[lang].callActive, false);
-  });
-
-  vapi.on("speech-end", () => setText("t-vstat", T[lang].processing));
-
-  vapi.on("message", (msg) => {
-    if (msg?.type === "transcript" && msg?.transcript) {
-      const who = msg.role === "user"
-        ? (lang === "ar" ? "أنت: " : lang === "fr" ? "Vous: " : "You: ")
-        : "VOX: ";
-      setVTx(who + msg.transcript, false);
-      if (msg.role === "assistant") setText("t-vstat", T[lang].vstat);
+  // ====== i18n ======
+  let lang = "ar";
+  const T = {
+    ar: {
+      h1: "نؤتمت أعمالك بقوة الذكاء الاصطناعي",
+      sub: "اضغط زر VOX في الأسفل وابدأ محادثة صوتية طبيعية.",
+      ready: "جاهز",
+      connecting: "جارٍ الاتصال...",
+      listening: "يستمع الآن...",
+      thinking: "يعالج...",
+      ended: "انتهت المحادثة",
+      hint: "اضغط لبدء/إيقاف المحادثة",
+      close: "إغلاق",
+      err: "حدث خطأ. حاول مرة أخرى."
+    },
+    fr: {
+      h1: "Automatisez votre business avec l’IA",
+      sub: "Cliquez sur VOX et démarrez une conversation vocale naturelle.",
+      ready: "Prêt",
+      connecting: "Connexion...",
+      listening: "Écoute...",
+      thinking: "Traitement...",
+      ended: "Appel terminé",
+      hint: "Appuyez pour démarrer/arrêter",
+      close: "Fermer",
+      err: "Erreur. Réessayez."
+    },
+    en: {
+      h1: "Automate your business with AI",
+      sub: "Click VOX and start a natural voice conversation.",
+      ready: "Ready",
+      connecting: "Connecting...",
+      listening: "Listening...",
+      thinking: "Processing...",
+      ended: "Call ended",
+      hint: "Tap to start/stop",
+      close: "Close",
+      err: "Error. Please try again."
     }
-  });
+  };
 
-  vapi.on("call-end", () => {
-    stopRingingTone();
-    playHangupTone();
-    callOn = false;
-    setCallUI(false);
-    setText("t-vstat", T[lang].vstat);
-    setVTx(T[lang].callEnded, false);
-  });
+  function setLang(l){
+    lang = l;
+    document.documentElement.lang = l;
+    document.documentElement.dir = (l === "ar") ? "rtl" : "ltr";
+    document.getElementById("t-h1").textContent = T[l].h1;
+    document.getElementById("t-sub").textContent = T[l].sub;
+    document.getElementById("t-status").textContent = T[l].ready;
+    document.getElementById("t-hint").textContent = T[l].hint;
+    document.getElementById("closeBtn").textContent = T[l].close;
 
-  vapi.on("error", () => {
-    stopRingingTone();
-    playHangupTone();
-    callOn = false;
-    setCallUI(false);
-    setText("t-vstat", T[lang].vstat);
-    setVTx(T[lang].errCall, false);
-  });
-
-  return vapi;
-}
-
-/* Call toggle */
-async function toggleCall() {
-  startRingingTone();
-  if (callOn) {
-    try { vapi?.stop(); } catch(e){}
-    callOn = false;
-    setCallUI(false);
-    setVTx(T[lang].callStopped, false);
-    setText("t-vstat", T[lang].vstat);
-    return;
+    document.querySelectorAll(".langs button").forEach(b=>{
+      b.classList.toggle("on", b.dataset.lang === l);
+    });
   }
 
-  setVTx(T[lang].connecting, true);
-  setText("t-vstat", T[lang].connecting);
+  // ====== UI helpers ======
+  const overlay = document.getElementById("overlay");
+  const fab = document.getElementById("fab");
+  const closeBtn = document.getElementById("closeBtn");
+  const toggleBtn = document.getElementById("toggleBtn");
+  const statusEl = document.getElementById("t-status");
+  const tx = document.getElementById("tx");
 
-  try {
-    const instance = initVapiOrThrow();
-    
-    await instance.start(ASST_ID);
-  } catch (err) {
-    callOn = false;
-    setCallUI(false);
-    setText("t-vstat", T[lang].vstat);
-    setVTx(T[lang].errStart + (err?.message ? ` (${err.message})` : ""), false);
+  function setTx(text, dim){
+    tx.textContent = text;
+    tx.classList.toggle("dim", !!dim);
   }
-}
 
-/* Wire UI events */
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    $id("bubble")?.classList.remove("hide");
-    setTimeout(() => closeBubble(), 6000);
-  }, 2000);
+  function openOverlay(){
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden","false");
+  }
+  function closeOverlay(){
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden","true");
+  }
 
-  $id("bubble-x")?.addEventListener("click", closeBubble);
-  $id("fab")?.addEventListener("click", openOverlay);
-  $id("open-voice")?.addEventListener("click", openVoice);
+  // ====== Vapi ======
+  let vapi = null;
+  let callOn = false;
 
-  $id("btn-cancel")?.addEventListener("click", closeAll);
-  $id("btn-end")?.addEventListener("click", closeAll);
-  $id("vbtn")?.addEventListener("click", toggleCall);
+  function initVapi(){
+    if (vapi) return vapi;
+    if (!window.Vapi) throw new Error("Vapi SDK not loaded");
 
-  document.querySelectorAll(".lang-btn").forEach((b) => {
-    b.addEventListener("click", () => setLang(b.dataset.lang));
+    vapi = new window.Vapi(VAPI_PUBLIC_KEY);
+
+    vapi.on("call-start", () => {
+      callOn = true;
+      toggleBtn.classList.add("on");
+      statusEl.textContent = T[lang].listening;
+      setTx((lang==="ar"?"الاتصال نشط — تحدث الآن":"Call active — speak now"), false);
+    });
+
+    vapi.on("speech-end", () => {
+      statusEl.textContent = T[lang].thinking;
+    });
+
+    vapi.on("message", (msg) => {
+      if (msg && msg.type === "transcript" && msg.transcript) {
+        const prefix =
+          msg.role === "user" ? (lang==="ar"?"أنت: ":lang==="fr"?"Vous: ":"You: ")
+                              : "VOX: ";
+        setTx(prefix + msg.transcript, false);
+        if (msg.role === "assistant") statusEl.textContent = T[lang].ready;
+      }
+    });
+
+    vapi.on("call-end", () => {
+      callOn = false;
+      toggleBtn.classList.remove("on");
+      statusEl.textContent = T[lang].ready;
+      setTx(T[lang].ended, false);
+    });
+
+    vapi.on("error", () => {
+      callOn = false;
+      toggleBtn.classList.remove("on");
+      statusEl.textContent = T[lang].ready;
+      setTx(T[lang].err, false);
+    });
+
+    return vapi;
+  }
+
+  async function toggleCall(){
+    try{
+      initVapi();
+
+      // iOS/Safari: ensure this is triggered by a user gesture (click) — it is.
+      if (callOn){
+        try { vapi.stop(); } catch(e){}
+        callOn = false;
+        toggleBtn.classList.remove("on");
+        statusEl.textContent = T[lang].ready;
+        setTx("...", true);
+        return;
+      }
+
+      statusEl.textContent = T[lang].connecting;
+      setTx(T[lang].connecting, true);
+
+      await vapi.start(ASSISTANT_ID);
+
+    }catch(e){
+      callOn = false;
+      toggleBtn.classList.remove("on");
+      statusEl.textContent = T[lang].ready;
+      setTx(T[lang].err + (e && e.message ? " ("+e.message+")" : ""), false);
+    }
+  }
+
+  // ====== events ======
+  fab.addEventListener("click", () => { openOverlay(); setTx("...", true); statusEl.textContent = T[lang].ready; });
+  closeBtn.addEventListener("click", () => { if(callOn && vapi){ try{vapi.stop();}catch(e){} } callOn=false; toggleBtn.classList.remove("on"); closeOverlay(); });
+  toggleBtn.addEventListener("click", toggleCall);
+
+  document.querySelectorAll(".langs button").forEach(b=>{
+    b.addEventListener("click", ()=>setLang(b.dataset.lang));
   });
-});
 
-let ringCtx = null;
-let ringOsc = null;
-let ringGain = null;
-let ringInterval = null;
-
-function startRingingTone() {
-  if (ringCtx) return;
-
-  ringCtx = new (window.AudioContext || window.webkitAudioContext)();
-  ringGain = ringCtx.createGain();
-  ringGain.gain.value = 0.0;
-  ringGain.connect(ringCtx.destination);
-
-  ringOsc = ringCtx.createOscillator();
-  ringOsc.type = "sine";
-  ringOsc.frequency.value = 440; // tone
-  ringOsc.connect(ringGain);
-  ringOsc.start();
-
-  // Ring pattern: 1.2s ON, 2.0s OFF
-  const on = () => ringGain.gain.setTargetAtTime(0.1, ringCtx.currentTime, 0.03);
-  const off = () => ringGain.gain.setTargetAtTime(0.0, ringCtx.currentTime, 0.01);
-
-  on();
-  setTimeout(off, 1200);
-
-  ringInterval = setInterval(() => {
-    on();
-    setTimeout(off, 1200);
-  }, 3200);
-}
-
-function stopRingingTone() {
-  if (ringInterval) clearInterval(ringInterval);
-  ringInterval = null;
-
-  try { ringGain && (ringGain.gain.value = 0.0); } catch {}
-  try { ringOsc && ringOsc.stop(); } catch {}
-  ringOsc = null;
-
-  try { ringCtx && ringCtx.close(); } catch {}
-  ringCtx = null;
-  ringGain = null;
-}
-
-function playHangupTone() {
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  const ctx = new AudioCtx();
-
-  // volume global
-  const master = ctx.createGain();
-  master.gain.value = 0.08; // volume général
-  master.connect(ctx.destination);
-
-  function createBeep(startTime, duration) {
-    // fréquences réalistes téléphone
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-
-    osc1.type = "sine";
-    osc2.type = "triangle";
-
-    osc1.frequency.value = 480;
-    osc2.frequency.value = 620;
-
-    // gain individuel
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0, startTime);
-
-    // fade in/out doux
-    gain.gain.linearRampToValueAtTime(0.12, startTime + 0.01);
-    gain.gain.linearRampToValueAtTime(0.0, startTime + duration);
-
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(master);
-
-    osc1.start(startTime);
-    osc2.start(startTime);
-
-    osc1.stop(startTime + duration);
-    osc2.stop(startTime + duration);
-  }
-
-  const t = ctx.currentTime;
-
-  // vrai pattern "call ended"
-  createBeep(t, 0.13);
-  createBeep(t + 0.22, 0.13);
-
-  // fermeture audio
-  setTimeout(() => {
-    try {
-      ctx.close();
-    } catch (e) {}
-  }, 1000);
-}
-
-/* Expose (optional) */
-window.setLang = setLang;
-window.openOverlay = openOverlay;
-window.openVoice = openVoice;
-window.closeAll = closeAll;
-window.toggleCall = toggleCall;
+  // initial
+  setLang("ar");
 </script>
+</body>
+</html>
