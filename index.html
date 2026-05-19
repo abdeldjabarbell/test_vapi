@@ -473,7 +473,7 @@ function startRingingTone() {
   ringOsc.start();
 
   // Ring pattern: 1.2s ON, 2.0s OFF
-  const on = () => ringGain.gain.setTargetAtTime(0.03, ringCtx.currentTime, 0.01);
+  const on = () => ringGain.gain.setTargetAtTime(0.1, ringCtx.currentTime, 0.03);
   const off = () => ringGain.gain.setTargetAtTime(0.0, ringCtx.currentTime, 0.01);
 
   on();
