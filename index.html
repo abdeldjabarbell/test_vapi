@@ -411,6 +411,7 @@ function initVapiOrThrow() {
 
 /* Call toggle */
 async function toggleCall() {
+  startRingingTone();
   if (callOn) {
     try { vapi?.stop(); } catch(e){}
     callOn = false;
@@ -425,7 +426,7 @@ async function toggleCall() {
 
   try {
     const instance = initVapiOrThrow();
-    startRingingTone();
+    
     await instance.start(ASST_ID);
   } catch (err) {
     callOn = false;
@@ -501,33 +502,56 @@ function stopRingingTone() {
 }
 
 function playHangupTone() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const ctx = new AudioCtx();
 
-  const gain = ctx.createGain();
-  gain.gain.value = 0.0;
-  gain.connect(ctx.destination);
+  // volume global
+  const master = ctx.createGain();
+  master.gain.value = 0.08; // volume général
+  master.connect(ctx.destination);
 
-  const osc = ctx.createOscillator();
-  osc.type = "sine";
-  osc.frequency.value = 620; // bip téléphone
-  osc.connect(gain);
-  osc.start();
+  function createBeep(startTime, duration) {
+    // fréquences réalistes téléphone
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+
+    osc1.type = "sine";
+    osc2.type = "triangle";
+
+    osc1.frequency.value = 480;
+    osc2.frequency.value = 620;
+
+    // gain individuel
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, startTime);
+
+    // fade in/out doux
+    gain.gain.linearRampToValueAtTime(0.12, startTime + 0.01);
+    gain.gain.linearRampToValueAtTime(0.0, startTime + duration);
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(master);
+
+    osc1.start(startTime);
+    osc2.start(startTime);
+
+    osc1.stop(startTime + duration);
+    osc2.stop(startTime + duration);
+  }
 
   const t = ctx.currentTime;
-  const V = 0.12; // volume (monte à 0.18 si tu veux plus fort)
 
-  // bip 1: 120ms
-  gain.gain.setValueAtTime(0.0, t);
-  gain.gain.linearRampToValueAtTime(V, t + 0.01);
-  gain.gain.linearRampToValueAtTime(0.0, t + 0.12);
+  // vrai pattern "call ended"
+  createBeep(t, 0.13);
+  createBeep(t + 0.22, 0.13);
 
-  // bip 2: 120ms (après 80ms pause)
-  gain.gain.setValueAtTime(0.0, t + 0.20);
-  gain.gain.linearRampToValueAtTime(V, t + 0.21);
-  gain.gain.linearRampToValueAtTime(0.0, t + 0.32);
-
-  osc.stop(t + 0.40);
-  osc.onended = () => { try { ctx.close(); } catch {} };
+  // fermeture audio
+  setTimeout(() => {
+    try {
+      ctx.close();
+    } catch (e) {}
+  }, 1000);
 }
 
 /* Expose (optional) */
