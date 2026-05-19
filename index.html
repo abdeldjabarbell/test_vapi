@@ -390,6 +390,7 @@ function initVapiOrThrow() {
 
   vapi.on("call-end", () => {
     stopRingingTone();
+    playHangupTone();
     callOn = false;
     setCallUI(false);
     setText("t-vstat", T[lang].vstat);
@@ -398,6 +399,7 @@ function initVapiOrThrow() {
 
   vapi.on("error", () => {
     stopRingingTone();
+    playHangupTone();
     callOn = false;
     setCallUI(false);
     setText("t-vstat", T[lang].vstat);
@@ -496,6 +498,36 @@ function stopRingingTone() {
   try { ringCtx && ringCtx.close(); } catch {}
   ringCtx = null;
   ringGain = null;
+}
+
+function playHangupTone() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  const gain = ctx.createGain();
+  gain.gain.value = 0.0;
+  gain.connect(ctx.destination);
+
+  const osc = ctx.createOscillator();
+  osc.type = "sine";
+  osc.frequency.value = 620; // bip téléphone
+  osc.connect(gain);
+  osc.start();
+
+  const t = ctx.currentTime;
+  const V = 0.12; // volume (monte à 0.18 si tu veux plus fort)
+
+  // bip 1: 120ms
+  gain.gain.setValueAtTime(0.0, t);
+  gain.gain.linearRampToValueAtTime(V, t + 0.01);
+  gain.gain.linearRampToValueAtTime(0.0, t + 0.12);
+
+  // bip 2: 120ms (après 80ms pause)
+  gain.gain.setValueAtTime(0.0, t + 0.20);
+  gain.gain.linearRampToValueAtTime(V, t + 0.21);
+  gain.gain.linearRampToValueAtTime(0.0, t + 0.32);
+
+  osc.stop(t + 0.40);
+  osc.onended = () => { try { ctx.close(); } catch {} };
 }
 
 /* Expose (optional) */
