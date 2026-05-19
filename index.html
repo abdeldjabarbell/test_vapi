@@ -369,6 +369,7 @@ function initVapiOrThrow() {
   vapi = new window.VapiCtor(VAPI_PUBLIC_KEY);
 
   vapi.on("call-start", () => {
+    stopRingingTone();
     callOn = true;
     setCallUI(true);
     setText("t-vstat", T[lang].listening);
@@ -388,6 +389,7 @@ function initVapiOrThrow() {
   });
 
   vapi.on("call-end", () => {
+    stopRingingTone();
     callOn = false;
     setCallUI(false);
     setText("t-vstat", T[lang].vstat);
@@ -395,6 +397,7 @@ function initVapiOrThrow() {
   });
 
   vapi.on("error", () => {
+    stopRingingTone();
     callOn = false;
     setCallUI(false);
     setText("t-vstat", T[lang].vstat);
@@ -420,6 +423,7 @@ async function toggleCall() {
 
   try {
     const instance = initVapiOrThrow();
+    startRingingTone();
     await instance.start(ASST_ID);
   } catch (err) {
     callOn = false;
@@ -448,6 +452,51 @@ document.addEventListener("DOMContentLoaded", () => {
     b.addEventListener("click", () => setLang(b.dataset.lang));
   });
 });
+
+let ringCtx = null;
+let ringOsc = null;
+let ringGain = null;
+let ringInterval = null;
+
+function startRingingTone() {
+  if (ringCtx) return;
+
+  ringCtx = new (window.AudioContext || window.webkitAudioContext)();
+  ringGain = ringCtx.createGain();
+  ringGain.gain.value = 0.0;
+  ringGain.connect(ringCtx.destination);
+
+  ringOsc = ringCtx.createOscillator();
+  ringOsc.type = "sine";
+  ringOsc.frequency.value = 440; // tone
+  ringOsc.connect(ringGain);
+  ringOsc.start();
+
+  // Ring pattern: 1.2s ON, 2.0s OFF
+  const on = () => ringGain.gain.setTargetAtTime(0.03, ringCtx.currentTime, 0.01);
+  const off = () => ringGain.gain.setTargetAtTime(0.0, ringCtx.currentTime, 0.01);
+
+  on();
+  setTimeout(off, 1200);
+
+  ringInterval = setInterval(() => {
+    on();
+    setTimeout(off, 1200);
+  }, 3200);
+}
+
+function stopRingingTone() {
+  if (ringInterval) clearInterval(ringInterval);
+  ringInterval = null;
+
+  try { ringGain && (ringGain.gain.value = 0.0); } catch {}
+  try { ringOsc && ringOsc.stop(); } catch {}
+  ringOsc = null;
+
+  try { ringCtx && ringCtx.close(); } catch {}
+  ringCtx = null;
+  ringGain = null;
+}
 
 /* Expose (optional) */
 window.setLang = setLang;
